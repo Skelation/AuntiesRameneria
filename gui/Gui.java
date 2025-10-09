@@ -13,9 +13,9 @@ public class Gui {
     public JPanel orderPane = new JPanel();
     public JTabbedPane tabbedPane = new JTabbedPane();
 
-    private JPanel Counter = new JPanel();
-    private JPanel Kitchen = new JPanel();
-    private JPanel Fridge = new JPanel();
+    private JPanel Counter = new gui.Counter().panel;
+    private JPanel Kitchen = new gui.Kitchen().panel;
+    private JPanel Fridge = new gui.Fridge().panel;//TODO Fridge panel
 
     public Gui() {
         frame = new JFrame();
@@ -34,6 +34,7 @@ public class Gui {
         gbc.gridx = 0;
         gbc.weightx = 0.8;
         gbc.weighty = 1;
+    
         p.add(tabbedPane, gbc);
 
         orderPane.setSize(50, 100);
