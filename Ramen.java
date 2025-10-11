@@ -1,12 +1,15 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
+
 class Ramen {
     private boolean isCooked;
     private boolean hasNoodle;
-    private boolean hasSpice;
-    private boolean hasSoup;
-    private boolean hasShiitake;
     private boolean hasSeasoningOil;
     private int timeCooked;
     private boolean isBurnt;
+    private String seasoning;
+    private ArrayList<String> toppings;
 
     public boolean cook() {
         if (this.isCooked) {
@@ -27,30 +30,9 @@ class Ramen {
         }
     }
 
-    public boolean addSoup() {
-        if (this.hasSoup == true) {
-            return false;
-        } else {
-            this.hasSoup = true;
-            return true;
-        }
-    }
-
-    public boolean addSpice() {
-        if (this.hasSpice == true) {
-            return false;
-        } else {
-            this.hasSpice = true;
-            return true;
-        }
-    }
-
-    public boolean addShiitake() {
-        if (this.hasShiitake == true) {
-            return false;
-        } else {
-            this.hasShiitake = true;
-            return true;
+    public void addSeasoning(String seasoning) {
+        if (this.seasoning.isEmpty()) {
+            this.seasoning = seasoning;
         }
     }
 
@@ -61,5 +43,29 @@ class Ramen {
             this.hasSeasoningOil = true;
             return true;
         }
+    }
+
+    public Ramen giveRandomRamen() {
+        Ramen randomRamen = new Ramen();
+        String[] seasonings = {"Carbonara", "Hot Chicken", "2x Spicy",
+            "3x Spicy", "Cheese", "Habanero Lime"};
+
+        String seasoning = seasonings[(new Random()).nextInt(seasonings.length)];
+        ArrayList<String> allToppings = new ArrayList<String>(
+            Arrays.asList("Shiitake", "Pork")
+        );
+
+        int numberOfToppings = (new Random()).nextInt(allToppings.size());
+        
+        for (int i = 0; i < numberOfToppings; i++) {
+            randomRamen.toppings.add(toppings.get((new Random()).nextInt(toppings.size())));
+        }
+
+        randomRamen.addNoodle();
+        randomRamen.cook();
+        randomRamen.addSeasoning(seasoning);
+        randomRamen.addSeasoningOil();
+
+        return randomRamen;
     }
 }
