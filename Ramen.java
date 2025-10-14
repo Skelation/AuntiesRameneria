@@ -22,7 +22,7 @@ class Ramen {
     }
 
     public boolean addNoodle() {
-        if (this.hasNoodle== true) {
+        if (this.hasNoodle) {
             return false;
         } else {
             this.hasNoodle = true;
@@ -37,7 +37,7 @@ class Ramen {
     }
 
     public boolean addSeasoningOil() {
-        if (this.hasSeasoningOil == true) {
+        if (this.hasSeasoningOil) {
             return false;
         } else {
             this.hasSeasoningOil = true;
@@ -52,7 +52,8 @@ class Ramen {
 
         String seasoning = seasonings[(new Random()).nextInt(seasonings.length)];
         ArrayList<String> allToppings = new ArrayList<String>(
-            Arrays.asList("Shiitake", "Pork")
+            Arrays.asList("Shiitake", "Pork loin", "Fried eggs", "Karagae chicken",
+                "Katsu chicken", "Gyoza", "Spring onions")
         );
 
         int numberOfToppings = (new Random()).nextInt(allToppings.size());

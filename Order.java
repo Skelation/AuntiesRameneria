@@ -6,9 +6,16 @@ class Order {
         this.ramen = ramen;
     }
 
+    public void setDrink(Drink drink) {
+        this.drink = drink;
+    }
+
     public Ramen getRamen() {
         return this.ramen;
     }
 
+    public Drink getDrink() {
+        return this.drink;
+    }
     
 }

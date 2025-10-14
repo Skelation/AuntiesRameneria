@@ -13,7 +13,7 @@ public class Drink {
     }
 
     public Drink giveRandomDrink() {
-        String[] drinks = {"Soda", "Soju"};
+        String[] drinks = {"Soda", "Soju", "Kombucha", "Beer"};
         String[] sizes = {"Small", "Medium", "Large"};
         Drink randomDrink = new Drink();
 
