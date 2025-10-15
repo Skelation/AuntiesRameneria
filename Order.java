@@ -1,4 +1,4 @@
-class Order {
+public class Order {
     private Ramen ramen = new Ramen();
     private Drink drink = new Drink();
     
@@ -17,5 +17,4 @@ class Order {
     public Drink getDrink() {
         return this.drink;
     }
-    
 }
