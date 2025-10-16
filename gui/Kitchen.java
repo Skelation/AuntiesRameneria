@@ -24,6 +24,23 @@ public class Kitchen {
         gbc.gridy = 1;
         gbc.weightx = 1;
         gbc.weighty = 0.2;
+
+        // Button 
+        // Water
+        // Carbonara
+        // Hot chicken 
+        // 2x spicy
+        // 3x spicy
+        // Cheese 
+        // Habanero lime
+        // Shiitake
+        // Pork loin
+        // Fried eggs
+        // karaage
+        // katsu
+        // gyoza
+        // spring onion
+        // ingredientsPanel.add
         ingredientsPanel.setBackground(Color.gray);
         panel.add(ingredientsPanel, gbc);
     }
