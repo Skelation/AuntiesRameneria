@@ -5,7 +5,7 @@ public class AuntiesRameneria {
         Stove stove = new Stove();
         Order[] orders = new Order[3];
 
-        Clock clock = new Clock();
+        clock = new Clock();
 
         clock.eventTimes.add(5L);
 
