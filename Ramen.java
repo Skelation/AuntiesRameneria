@@ -52,7 +52,7 @@ class Ramen {
 
         String seasoning = seasonings[(new Random()).nextInt(seasonings.length)];
         ArrayList<String> allToppings = new ArrayList<String>(
-            Arrays.asList("Shiitake", "Pork loin", "Fried eggs", "Karagae chicken",
+            Arrays.asList("Shiitake", "Pork loin", "Fried eggs", "KaraAge chicken",
                 "Katsu chicken", "Gyoza", "Spring onions")
         );
 

@@ -20,10 +20,11 @@ public class Gui {
     public Gui() {
         frame = new JFrame();
         frame.setTitle("Auntie's Rameneria");
-        frame.setSize(600, 500);
+        frame.setSize(1920, 1080);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
+        frame.setResizable(false);
 
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridy = 0;
