@@ -10,8 +10,8 @@ public class Ramen {
     private boolean hasSeasoningOil;
     private int timeCooked;
     private boolean isBurnt;
-    private String seasoning;
-    private ArrayList<String> toppings;
+    private String seasoning = "";
+    private ArrayList<String> toppings = new ArrayList<>();
 
     public boolean cook() {
         if (this.isCooked) {
@@ -32,11 +32,20 @@ public class Ramen {
         }
     }
 
-    public void addSeasoning(String seasoning) {
+    public Ramen addSeasoning(String seasoning) {
         if (this.seasoning.isEmpty()) {
             this.seasoning = seasoning;
         }
+        return this;
     }
+
+    // //TODO Can have multiple toppings
+    // public Ramen addTopping(String topping) {
+    //     if (this.toppings.size() == 0) {
+    //         this.toppings.add(topping);
+    //     }
+    //     return this;
+    // }
 
     public boolean addSeasoningOil() {
         if (this.hasSeasoningOil) {
@@ -45,6 +54,14 @@ public class Ramen {
             this.hasSeasoningOil = true;
             return true;
         }
+    }
+
+    public String getSeasoning() {
+        return this.seasoning;
+    }
+
+    public ArrayList<String> getToppings() {
+        return this.toppings;
     }
 
     public Ramen giveRandomRamen() {
@@ -61,7 +78,7 @@ public class Ramen {
         int numberOfToppings = (new Random()).nextInt(allToppings.size());
         
         for (int i = 0; i < numberOfToppings; i++) {
-            randomRamen.toppings.add(toppings.get((new Random()).nextInt(toppings.size())));
+            randomRamen.toppings.add(allToppings.get((new Random()).nextInt(allToppings.size())));
         }
 
         randomRamen.addNoodle();

@@ -3,6 +3,8 @@ package gui;
 import models.*;
 
 import java.awt.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 public class Orders {
@@ -21,9 +23,18 @@ public class Orders {
         gbc.insets = new Insets(5, 0, 5, 0);
         for (int i = 0; i < orders.length; i++) {
             gbc.gridy = i;
-            JButton button = new JButton("Order " + (i + 1));
-            button.setPreferredSize(new Dimension(220, 40));
-            gbc.gridy = i;
+            JPanel content = new JPanel();
+            content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+            content.add(new JLabel(orders[i].getRamen().getSeasoning()));
+
+            ArrayList<String> toppings = orders[i].getRamen().getToppings();
+            for (String topping : toppings) {
+                content.add(new JLabel("+ " + topping));
+            }
+
+            JButton button = new JButton();
+            button.setLayout(new BorderLayout());
+            button.add(content, BorderLayout.CENTER);
             panel.add(button, gbc);
         }
         gbc.weightx = 1;

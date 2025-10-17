@@ -4,12 +4,14 @@ public class Order {
     private Ramen ramen = new Ramen();
     private Drink drink = new Drink();
     
-    public void setRamen(Ramen ramen) {
+    public Order setRamen(Ramen ramen) {
         this.ramen = ramen;
+        return this;
     }
 
-    public void setDrink(Drink drink) {
+    public Order setDrink(Drink drink) {
         this.drink = drink;
+        return this;
     }
 
     public Ramen getRamen() {
