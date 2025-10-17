@@ -16,6 +16,7 @@ public class Gui {
     private JPanel Counter = new gui.Counter().panel;
     private JPanel Kitchen = new gui.Kitchen().panel;
     private JPanel Fridge = new gui.Fridge().panel;//TODO Fridge panel
+    private JPanel Orders = new gui.Orders().panel;
 
     public Gui() {
         frame = new JFrame();
@@ -33,17 +34,15 @@ public class Gui {
         tabbedPane.add("Kitchen", Kitchen);
         tabbedPane.add("Fridge", Fridge);
         gbc.gridx = 0;
-        gbc.weightx = 0.8;
+        gbc.weightx = 0.9;
         gbc.weighty = 1;
     
         p.add(tabbedPane, gbc);
 
-        orderPane.setSize(50, 100);
-        orderPane.setBackground(Color.red);
         gbc.gridx = 1;
-        gbc.weightx = 0.2;
+        gbc.weightx = 0.1;
         gbc.weighty = 1;
-        p.add(orderPane, gbc);
+        p.add(Orders, gbc);
         frame.add(p);
     }
 }
