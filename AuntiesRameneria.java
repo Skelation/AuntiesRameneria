@@ -9,6 +9,16 @@ class AuntiesRameneria {
             new Order().setRamen(new Ramen().giveRandomRamen()),
             new Order().setRamen(new Ramen().giveRandomRamen())
         };
-        new Gui(orders);
+        Gui gui = new Gui(orders);
+
+        for (int i = 0; i < 3; i++) {
+            try {
+                Thread.sleep(2000); // wait 2 seconds
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Order newOrder = new Order().setRamen(new Ramen().giveRandomRamen());
+            gui.ordersPanel.addOrder(newOrder);
+        }
     } 
 }

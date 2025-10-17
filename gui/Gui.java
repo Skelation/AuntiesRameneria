@@ -18,9 +18,12 @@ public class Gui {
     private JPanel Kitchen = new gui.Kitchen().panel;
     private JPanel Fridge = new gui.Fridge().panel;//TODO Fridge panel
     private JPanel Orders;
+    public Orders ordersPanel;
 
     public Gui(Order[] orders) {
-        Orders = new gui.Orders(orders).panel;
+        // Orders = new gui.Orders(orders).panel;
+        ordersPanel = new Orders(orders);
+        Orders = ordersPanel.panel;
         frame = new JFrame();
         frame.setTitle("Auntie's Rameneria");
         frame.setSize(1920, 1080);

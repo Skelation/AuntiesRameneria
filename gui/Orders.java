@@ -1,44 +1,42 @@
 package gui;
 
 import models.*;
-
-import java.awt.*;
-import java.util.ArrayList;
-
 import javax.swing.*;
+import java.awt.*;
 
 public class Orders {
-    public JPanel panel = new JPanel(new GridBagLayout());
-    private GridBagConstraints gbc = new GridBagConstraints();
-    public Orders(Order[] orders) {
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+    public JPanel panel = new JPanel();
 
+    public Orders(Order[] orders) {
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(Color.red);
 
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.weighty = 0.0;
-        gbc.anchor = GridBagConstraints.NORTH;
-        gbc.insets = new Insets(5, 0, 5, 0);
+        panel.add(Box.createVerticalStrut(5));
         for (int i = 0; i < orders.length; i++) {
-            gbc.gridy = i;
-            JPanel content = new JPanel();
-            content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-            content.add(new JLabel(orders[i].getRamen().getSeasoning()));
-
-            ArrayList<String> toppings = orders[i].getRamen().getToppings();
-            for (String topping : toppings) {
-                content.add(new JLabel("+ " + topping));
-            }
-
-            JButton button = new JButton();
-            button.setLayout(new BorderLayout());
-            button.add(content, BorderLayout.CENTER);
-            panel.add(button, gbc);
+            addOrder(orders[i]);
         }
-        gbc.weightx = 1;
-        gbc.weighty = 1;
-        panel.add(new JLabel(" "), gbc);
+    }
+
+    public void addOrder(Order order) {
+        JPanel content = new JPanel();
+        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+        content.add(new JLabel(order.getRamen().getSeasoning()));
+        for (String topping : order.getRamen().getToppings()) {
+            content.add(new JLabel("+ " + topping));
+        }
+
+        JButton button = new JButton();
+        button.setLayout(new BorderLayout());
+        button.add(content, BorderLayout.CENTER);
+
+        button.setAlignmentX(Component.LEFT_ALIGNMENT);
+        button.setMaximumSize(new Dimension(Integer.MAX_VALUE, button.getPreferredSize().height));
+
+        panel.add(button);
+        panel.add(Box.createVerticalStrut(5));
+
+        panel.revalidate();
+        panel.repaint();
     }
 }
+
