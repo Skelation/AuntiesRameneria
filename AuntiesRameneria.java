@@ -11,6 +11,7 @@ class AuntiesRameneria {
         };
         Gui gui = new Gui(orders);
 
+        // for (int i = 0; i < 3 && orders.length < 3; i++) {
         for (int i = 0; i < 3; i++) {
             try {
                 Thread.sleep(2000);

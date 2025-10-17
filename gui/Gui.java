@@ -14,16 +14,21 @@ public class Gui {
     public JPanel orderPane = new JPanel();
     public JTabbedPane tabbedPane = new JTabbedPane();
 
-    private JPanel Counter = new gui.Counter().panel;
     private JPanel Kitchen = new gui.Kitchen().panel;
     private JPanel Fridge = new gui.Fridge().panel;//TODO Fridge panel
     private JPanel Orders;
     public Orders ordersPanel;
+    private JPanel Counter;
+    private Counter counterPanel;
 
     public Gui(Order[] orders) {
         // Orders = new gui.Orders(orders).panel;
         ordersPanel = new Orders(orders);
         Orders = ordersPanel.panel;
+
+        counterPanel = new Counter(orders);
+        Counter = counterPanel.panel;
+
         frame = new JFrame();
         frame.setTitle("Auntie's Rameneria");
         frame.setSize(1920, 1080);
