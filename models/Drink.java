@@ -24,5 +24,4 @@ public class Drink {
 
         return randomDrink;
     }
-
 }
