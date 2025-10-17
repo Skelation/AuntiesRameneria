@@ -3,6 +3,7 @@ package gui;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import models.*;
 
 import javax.swing.*;
 
@@ -16,9 +17,10 @@ public class Gui {
     private JPanel Counter = new gui.Counter().panel;
     private JPanel Kitchen = new gui.Kitchen().panel;
     private JPanel Fridge = new gui.Fridge().panel;//TODO Fridge panel
-    private JPanel Orders = new gui.Orders().panel;
+    private JPanel Orders;
 
-    public Gui() {
+    public Gui(Order[] orders) {
+        Orders = new gui.Orders(orders).panel;
         frame = new JFrame();
         frame.setTitle("Auntie's Rameneria");
         frame.setSize(1920, 1080);

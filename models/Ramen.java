@@ -1,8 +1,10 @@
+package models;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-class Ramen {
+public class Ramen {
     private boolean isCooked;
     private boolean hasNoodle;
     private boolean hasSeasoningOil;

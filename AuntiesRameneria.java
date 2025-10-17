@@ -1,7 +1,12 @@
 import gui.Gui;
+import models.*;
 
 class AuntiesRameneria {
     public static void main(String[] args) {
-        new Gui();
+        Order[] orders = {
+            new Order(),
+            new Order()
+        };
+        new Gui(orders);
     } 
 }

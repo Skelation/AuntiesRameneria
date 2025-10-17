@@ -1,4 +1,6 @@
-class Order {
+package models;
+
+public class Order {
     private Ramen ramen = new Ramen();
     private Drink drink = new Drink();
     

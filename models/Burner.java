@@ -1,4 +1,6 @@
-class Burner {
+package models;
+
+public class Burner {
     private Ramen ramen;
     private boolean isOn;
 

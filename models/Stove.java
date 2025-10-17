@@ -1,4 +1,6 @@
-class Stove {
+package models;
+
+public class Stove {
     private Burner[] burners;
 
     public boolean addRamen(Ramen ramen) {
