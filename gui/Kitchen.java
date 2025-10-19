@@ -35,6 +35,8 @@ public class Kitchen {
         JPanel toppingsPanel = new JPanel();
         ingredientsPanel.add(seasoningsPanel);
         ingredientsPanel.add(toppingsPanel);
+        
+        ButtonGroup group = new ButtonGroup();
 
         for (int i = 0; i < seasonings.length; i++) {
             ImageIcon icon = new ImageIcon();
@@ -60,11 +62,22 @@ public class Kitchen {
             Image image = icon.getImage();
             image = image.getScaledInstance(120, 120, Image.SCALE_DEFAULT);
             icon = new ImageIcon(image);
-            JButton button = new JButton(icon);
+            JToggleButton button = new JToggleButton(icon);
             button.setPreferredSize(new Dimension(120, 120));
             seasoningsPanel.add(button);
             button.setBorder(BorderFactory.createEmptyBorder());
             button.setContentAreaFilled(false);
+
+            button.addItemListener(e -> {
+                if (button.isSelected()) {
+                    button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
+                    button.setBorderPainted(true);
+                } else {
+                    button.setBorderPainted(false);
+                }
+            });
+            group.add(button);
+
         }
 
         for (int i = 0; i < toppings.length; i++) {
@@ -89,11 +102,22 @@ public class Kitchen {
             Image image = icon.getImage();
             image = image.getScaledInstance(120, 120, Image.SCALE_DEFAULT);
             icon = new ImageIcon(image);
-            JButton button = new JButton(icon);
+            JToggleButton button = new JToggleButton(icon);
             button.setPreferredSize(new Dimension(120, 120));
             toppingsPanel.add(button);
             button.setBorder(BorderFactory.createEmptyBorder());
             button.setContentAreaFilled(false);
+
+            button.addItemListener(e -> {
+                if (button.isSelected()) {
+                    button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
+                    button.setBorderPainted(true);
+                } else {
+                    button.setBorderPainted(false);
+                }
+            });
+            group.add(button);
+
         }
 
         ingredientsPanel.setBackground(Color.gray);

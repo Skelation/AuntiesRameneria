@@ -25,7 +25,7 @@ public class Counter {
     private GridBagConstraints gbc = new GridBagConstraints();
 
     public Counter(Order[] orders) {
-        bottomPanel.setBackground(Color.red);
+        bottomPanel.setBackground(Color.decode("#964B00"));
         SpacerPanel.setOpaque(false);
         clientsPanel.setOpaque(false);
 
@@ -42,6 +42,8 @@ public class Counter {
 
         topPanel.add(SpacerPanel, BorderLayout.CENTER);
         topPanel.add(clientsPanel, BorderLayout.SOUTH);
+
+        ButtonGroup group = new ButtonGroup();
 
         for (int i = 0; i < orders.length; i++) {
             ImageIcon icon = new ImageIcon();
@@ -64,10 +66,23 @@ public class Counter {
             Image image = icon.getImage();
             image = image.getScaledInstance(500, 500, Image.SCALE_DEFAULT);
             icon = new ImageIcon(image);
-            JButton button = new JButton(icon);
+
+            JToggleButton button = new JToggleButton(icon);
             button.setPreferredSize(new Dimension(500, 500));
+            panel.add(button);
             button.setBorder(BorderFactory.createEmptyBorder());
             button.setContentAreaFilled(false);
+
+            button.addItemListener(e -> {
+                if (button.isSelected()) {
+                    button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
+                    button.setBorderPainted(true);
+                } else {
+                    button.setBorderPainted(false);
+                }
+            });
+            group.add(button);
+
             clientsPanel.add(button);
         }
     }

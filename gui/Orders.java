@@ -9,7 +9,7 @@ public class Orders {
 
     public Orders(Order[] orders) {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBackground(Color.red);
+        panel.setBackground(Color.GRAY);
 
         panel.add(Box.createVerticalStrut(5));
         for (int i = 0; i < orders.length; i++) {

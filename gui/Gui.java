@@ -17,7 +17,7 @@ public class Gui {
     public JTabbedPane tabbedPane = new JTabbedPane();
 
     private JPanel Kitchen = new gui.Kitchen().panel;
-    private JPanel Fridge = new gui.Fridge().panel;//TODO Fridge panel
+    private JPanel Fridge = new gui.Fridge().panel;
     private JPanel Orders;
     public Orders ordersPanel;
     private JPanel Counter;
