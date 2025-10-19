@@ -1,9 +1,10 @@
 package gui;
 
+import models.Ramen;
+import models.Stove;
+
 import java.awt.*;
 import javax.swing.*;
-
-import models.Stove;
 
 public class Kitchen {
     public JPanel panel = new JPanel(new GridBagLayout());
@@ -66,27 +67,13 @@ public class Kitchen {
         ingredientsPanel.add(toppingsPanel);
         
         //First row seasonings
+        
+
         for (int i = 0; i < seasonings.length; i++) {
             ImageIcon icon = new ImageIcon();
-            if (seasonings[i] == "2x Spicy") {
-                icon = new ImageIcon("Assets/2xSpicy.png");
-            } else if (seasonings[i] == "Hot Chicken") {
-                icon = new ImageIcon("Assets/Chicken.png");
-            } else if (seasonings[i] == "Carbonara") {
-                icon = new ImageIcon("Assets/Carbonara.png");
-            } else if (seasonings[i] == "3x Spicy") {
-                icon = new ImageIcon("Assets/3xSpicy.png");
-            } else if (seasonings[i] == "Cheese") {
-                icon = new ImageIcon("Assets/Cheese.png");
-            } else if (seasonings[i] == "Habanero Lime") {
-                icon = new ImageIcon("Assets/HabaneroLime.png");
-            } else if (seasonings[i] == "Water") {
-                icon = new ImageIcon("Assets/Water.png");
-            } else if (seasonings[i] == "Noodles") {
-                icon = new ImageIcon("Assets/Noodles.png");
-            } else {
-                icon = new ImageIcon("Assets/Cheese.png");
-            }
+            String pathToImage = getSeasoningImage(seasonings[i]);
+            
+            icon = new ImageIcon(pathToImage);
             Image image = icon.getImage();
             image = image.getScaledInstance(120, 120, Image.SCALE_DEFAULT);
             icon = new ImageIcon(image);
@@ -105,27 +92,14 @@ public class Kitchen {
                 }
             });
         }
+        
 
         //Second row Toppings
         for (int i = 0; i < toppings.length; i++) {
             ImageIcon icon = new ImageIcon();
-            if (toppings[i] == "Shiitake") {
-                icon = new ImageIcon("Assets/ShiitakeMFULL.png");
-            } else if (toppings[i] == "Pork loin") {
-                icon = new ImageIcon("Assets/PorkLoin.png");
-            } else if (toppings[i] == "Fried eggs") {
-                icon = new ImageIcon("Assets/Egg.png");
-            } else if (toppings[i] == "KaraAge chicken") {
-                icon = new ImageIcon("Assets/KaraAge.png");
-            } else if (toppings[i] == "Katsu chicken") {
-                icon = new ImageIcon("Assets/Katsu.png");
-            } else if (toppings[i] == "Gyoza") {
-                icon = new ImageIcon("Assets/Gyoza.png");
-            } else if (toppings[i] == "Spring onions") {
-                icon = new ImageIcon("Assets/SpringOnion.png");
-            } else {
-                icon = new ImageIcon("Assets/Shiitake.png");
-            }
+
+            String pathToImage = getToppingImage(toppings[i]);
+            icon = new ImageIcon(pathToImage);
             Image image = icon.getImage();
             image = image.getScaledInstance(120, 120, Image.SCALE_DEFAULT);
             icon = new ImageIcon(image);
@@ -145,7 +119,49 @@ public class Kitchen {
             });
             panel.add(ingredientsPanel, gbc);
         }
+    }
 
-        
+    private String getSeasoningImage(String s) {
+        switch (s) {
+            case ("2x Spicy"):
+                return "Assets/2xSpicy.png";
+            case ("Hot Chicken"):
+                return "Assets/Chicken.png";
+            case ("Carbonara"):
+                return "Assets/Carbonara.png";
+            case ( "3x Spicy"):
+                return "Assets/3xSpicy.png";
+            case ("Cheese"):
+                return "Assets/Cheese.png";
+            case ( "Habanero Lime"):
+                return "Assets/HabaneroLime.png";
+            case ("Water"):
+                return "Assets/Water.png";
+            case ("Noodles"):
+                return "Assets/Noodles.png";
+            default:
+                return "Assets/Noodles.png";
+        }
+    }
+
+    private String getToppingImage(String s) {
+        switch (s) {
+            case ("Shiitake"):
+                return "Assets/ShiitakeMFULL.png";
+            case ( "Pork loin"):
+                return "Assets/PorkLoin.png";
+            case ( "Fried eggs"):
+                return "Assets/Egg.png";
+            case ( "KaraAge chicken"):
+                return "Assets/KaraAge.png";
+            case ( "Katsu chicken"):
+                return "Assets/Katsu.png";
+            case ("Gyoza"):
+                return "Assets/Gyoza.png";
+            case ( "Spring onions"):
+                return "Assets/SpringOnion.png";
+            default:
+                return "Assets/SpringOnion.png";
+        }
     }
 }
