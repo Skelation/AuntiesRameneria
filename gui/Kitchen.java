@@ -63,12 +63,14 @@ public class Kitchen {
             JButton button = new JButton(icon);
             button.setPreferredSize(new Dimension(120, 120));
             seasoningsPanel.add(button);
+            button.setBorder(BorderFactory.createEmptyBorder());
+            button.setContentAreaFilled(false);
         }
 
         for (int i = 0; i < toppings.length; i++) {
             ImageIcon icon = new ImageIcon();
             if (toppings[i] == "Shiitake") {
-                icon = new ImageIcon("Assets/Shiitake.png");
+                icon = new ImageIcon("Assets/ShiitakeMFULL.png");
             } else if (toppings[i] == "Pork loin") {
                 icon = new ImageIcon("Assets/PorkLoin.png");
             } else if (toppings[i] == "Fried eggs") {
@@ -90,6 +92,8 @@ public class Kitchen {
             JButton button = new JButton(icon);
             button.setPreferredSize(new Dimension(120, 120));
             toppingsPanel.add(button);
+            button.setBorder(BorderFactory.createEmptyBorder());
+            button.setContentAreaFilled(false);
         }
 
         ingredientsPanel.setBackground(Color.gray);

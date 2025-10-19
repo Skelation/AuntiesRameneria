@@ -39,7 +39,7 @@ public class Counter {
         for (int i = 0; i < orders.length; i++) {
             ImageIcon icon = new ImageIcon();
             Random r = new Random();
-            int n = r.nextInt(0, 3);
+            int n = r.nextInt(0, 2);
             switch (n) {
                 case 0:
                     icon = new ImageIcon("Assets/FatMan.png");
@@ -55,10 +55,12 @@ public class Counter {
                     break;
             }
             Image image = icon.getImage();
-            image = image.getScaledInstance(300, 300, Image.SCALE_DEFAULT);
+            image = image.getScaledInstance(500, 500, Image.SCALE_DEFAULT);
             icon = new ImageIcon(image);
             JButton button = new JButton(icon);
-            button.setPreferredSize(new Dimension(300, 300));
+            button.setPreferredSize(new Dimension(500, 500));
+            button.setBorder(BorderFactory.createEmptyBorder());
+            button.setContentAreaFilled(false);
             clientsPanel.add(button);
         }
     }

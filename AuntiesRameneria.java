@@ -7,7 +7,6 @@ class AuntiesRameneria {
             new Order().setRamen(new Ramen().giveRandomRamen()),
             new Order().setRamen(new Ramen().giveRandomRamen()),
             new Order().setRamen(new Ramen().giveRandomRamen()),
-            new Order().setRamen(new Ramen().giveRandomRamen())
         };
         Gui gui = new Gui(orders);
 
