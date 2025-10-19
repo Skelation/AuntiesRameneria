@@ -8,7 +8,15 @@ import models.*;
 
 public class Counter {
     public JPanel panel = new JPanel(new GridBagLayout());
-    private JPanel topPanel = new JPanel(new BorderLayout());
+    private JPanel topPanel = new JPanel(new BorderLayout()) {
+        private Image backgroundImage = new ImageIcon("Assets/resto.jpg").getImage();
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    };
     private JPanel bottomPanel = new JPanel();
 
     private JPanel SpacerPanel = new JPanel();
@@ -18,9 +26,8 @@ public class Counter {
 
     public Counter(Order[] orders) {
         bottomPanel.setBackground(Color.red);
-        topPanel.setBackground(Color.blue);
-        SpacerPanel.setBackground(Color.blue);
-        clientsPanel.setBackground(Color.blue);
+        SpacerPanel.setOpaque(false);
+        clientsPanel.setOpaque(false);
 
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = 0;
