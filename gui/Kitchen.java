@@ -3,11 +3,14 @@ package gui;
 import java.awt.*;
 import javax.swing.*;
 
+import models.Stove;
+
 public class Kitchen {
     public JPanel panel = new JPanel(new GridBagLayout());
     private GridBagConstraints gbc = new GridBagConstraints();
 
-    private JPanel stovePanel = new JPanel();
+    private JPanel stovePanel = new JPanel(new GridBagLayout());
+    private JPanel burnersPanel = new JPanel();
     private JPanel ingredientsPanel = new JPanel();
 
     String[] seasonings = {"Water", "Noodles", "Carbonara", "Hot Chicken", "2x Spicy",
@@ -15,7 +18,9 @@ public class Kitchen {
     String[] toppings = {"Shiitake", "Pork loin", "Fried eggs", "KaraAge chicken",
                 "Katsu chicken", "Gyoza", "Spring onions"};
 
-    public Kitchen() {
+    public Kitchen(Stove stove) {
+        burnersPanel.setOpaque(false);
+        stovePanel.setBackground(Color.GRAY);
         gbc.fill = GridBagConstraints.BOTH;
         
         gbc.gridx = 0;
@@ -23,8 +28,32 @@ public class Kitchen {
         gbc.weightx = 1;
         gbc.weighty = 0.98;
         stovePanel.setBackground(Color.blue);
+
+        //Stove Panel
+        for (int i = 0; i < stove.getBurners().length; i++) {
+            ImageIcon icon = new ImageIcon("Assets/BowlRamen.png");
+            Image image = icon.getImage();
+            image = image.getScaledInstance(300, 300, Image.SCALE_DEFAULT);
+            icon = new ImageIcon(image);
+            JToggleButton button = new JToggleButton(icon);
+            button.setPreferredSize(new Dimension(300, 300));
+            stovePanel.add(button);
+            button.setBorder(BorderFactory.createEmptyBorder());
+            button.setContentAreaFilled(false);
+
+            button.addItemListener(e -> {
+                if (button.isSelected()) {
+                    button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
+                    button.setBorderPainted(true);
+                } else {
+                    button.setBorderPainted(false);
+                }
+            });
+        }
+
         panel.add(stovePanel, gbc);
     
+        //Ingredients panel
         gbc.gridy = 1;
         gbc.weightx = 1;
         gbc.weighty = 0.02;
@@ -36,8 +65,7 @@ public class Kitchen {
         ingredientsPanel.add(seasoningsPanel);
         ingredientsPanel.add(toppingsPanel);
         
-        ButtonGroup group = new ButtonGroup();
-
+        //First row seasonings
         for (int i = 0; i < seasonings.length; i++) {
             ImageIcon icon = new ImageIcon();
             if (seasonings[i] == "2x Spicy") {
@@ -76,10 +104,9 @@ public class Kitchen {
                     button.setBorderPainted(false);
                 }
             });
-            group.add(button);
-
         }
 
+        //Second row Toppings
         for (int i = 0; i < toppings.length; i++) {
             ImageIcon icon = new ImageIcon();
             if (toppings[i] == "Shiitake") {
@@ -116,11 +143,9 @@ public class Kitchen {
                     button.setBorderPainted(false);
                 }
             });
-            group.add(button);
-
+            panel.add(ingredientsPanel, gbc);
         }
 
-        ingredientsPanel.setBackground(Color.gray);
-        panel.add(ingredientsPanel, gbc);
+        
     }
 }

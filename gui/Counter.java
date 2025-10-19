@@ -43,8 +43,6 @@ public class Counter {
         topPanel.add(SpacerPanel, BorderLayout.CENTER);
         topPanel.add(clientsPanel, BorderLayout.SOUTH);
 
-        ButtonGroup group = new ButtonGroup();
-
         for (int i = 0; i < orders.length; i++) {
             ImageIcon icon = new ImageIcon();
             Random r = new Random();
@@ -81,8 +79,6 @@ public class Counter {
                     button.setBorderPainted(false);
                 }
             });
-            group.add(button);
-
             clientsPanel.add(button);
         }
     }

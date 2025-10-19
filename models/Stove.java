@@ -1,7 +1,7 @@
 package models;
 
 public class Stove {
-    private Burner[] burners;
+    private Burner[] burners = new Burner[4];
 
     public boolean addRamen(Ramen ramen) {
         for (int i = 0; i < burners.length; i++) {
@@ -11,5 +11,9 @@ public class Stove {
             }
         }
         return false;
+    }
+
+    public Burner[] getBurners() {
+        return this.burners;
     }
 }

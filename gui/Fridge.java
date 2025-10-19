@@ -11,7 +11,6 @@ public class Fridge {
 
     public Fridge() {
         panel.setBackground(Color.orange);
-        ButtonGroup group = new ButtonGroup();
 
         for (int i = 0; i < drinks.length; i++) {
             ImageIcon icon = new ImageIcon();
@@ -42,7 +41,6 @@ public class Fridge {
                     button.setBorderPainted(false);
                 }
             });
-            group.add(button);
             panel.add(button);
         }
     }
