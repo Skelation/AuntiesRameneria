@@ -4,6 +4,10 @@ public class Burner {
     private Ramen ramen;
     private boolean isOn;
 
+    public Burner() {
+        this.ramen = new Ramen();
+    }
+
     public boolean setRamen(Ramen ramen) {
         if (this.ramen == null) {
             this.ramen = ramen;

@@ -33,12 +33,25 @@ public class Ramen {
         }
     }
 
-    public boolean hasWater() {
+    public boolean addWater() {
         if (this.hasWater) {
             return false;
         } else {
             this.hasWater = true;
             return true;
+        }
+    }
+
+    public String getState() {
+        String path = "Assets/";
+        if (this.hasWater && this.hasNoodle && this.isCooked) {
+            return path + "BowlRamen.png";
+        } else if (this.hasWater && this.hasNoodle) {
+            return path + "BowlRawRamen.png";
+        } else if (this.hasWater) {
+            return path + "BowlWater.png";
+        } else {
+            return path + "EmptyBowl.png";
         }
     }
 
@@ -48,15 +61,6 @@ public class Ramen {
         }
         return this;
     }
-
-
-    // //TODO Can have multiple toppings
-    // public Ramen addTopping(String topping) {
-    //     if (this.toppings.size() == 0) {
-    //         this.toppings.add(topping);
-    //     }
-    //     return this;
-    // }
 
     public boolean addSeasoningOil() {
         if (this.hasSeasoningOil) {

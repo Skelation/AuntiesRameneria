@@ -4,9 +4,14 @@ import models.Ramen;
 import models.Stove;
 
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.swing.*;
 
 public class Kitchen {
+    private Stove stove;
+    private JToggleButton[] burnerButtons;
     public JPanel panel = new JPanel(new GridBagLayout());
     private GridBagConstraints gbc = new GridBagConstraints();
 
@@ -19,7 +24,62 @@ public class Kitchen {
     String[] toppings = {"Shiitake", "Pork loin", "Fried eggs", "KaraAge chicken",
                 "Katsu chicken", "Gyoza", "Spring onions"};
 
+    private Map<String, ImageIcon> imageCache = new HashMap<>();
+    private Map<String, ImageIcon> scaledImageCache = new HashMap<>();
+    
+    private static String ASSETS_PATH = "Assets/";
+
+    private void preloadImages() {
+        String[] seasoningImages = {"2xSpicy.png", "Chicken.png", "Carbonara.png", "3xSpicy.png", 
+                                  "Cheese.png", "HabaneroLime.png", "Water.png", "Noodles.png"};
+        
+        String[] toppingImages = {"ShiitakeMFULL.png", "PorkLoin.png", "Egg.png", "KaraAge.png", 
+                                "Katsu.png", "Gyoza.png", "SpringOnion.png"};
+        
+        String[] burnerImages = {"BowlRamen.png", "BowlRawRamen.png", "BowlWater.png", "EmptyBowl.png"};
+        
+        for (String imageName : seasoningImages) {
+            loadAndCacheImage(imageName);
+        }
+        for (String imageName : toppingImages) {
+            loadAndCacheImage(imageName);
+        }
+        for (String imageName : burnerImages) {
+            loadAndCacheImage(imageName);
+        }
+    }
+    
+    private void loadAndCacheImage(String imageName) {
+        String fullPath = ASSETS_PATH + imageName;
+        ImageIcon originalIcon = new ImageIcon(fullPath);
+        
+        imageCache.put(imageName, originalIcon);
+
+        Image scaledImage = originalIcon.getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT);
+        scaledImageCache.put(imageName, new ImageIcon(scaledImage));
+    }
+
+    private ImageIcon getCachedImage(String imageName, int size) {
+        if (size == 120) {
+            return scaledImageCache.get(imageName);
+        } else if (size == 300) {
+            String cacheKey = imageName + "_" + size;
+            if (!scaledImageCache.containsKey(cacheKey)) {
+                ImageIcon original = imageCache.get(imageName);
+                if (original != null) {
+                    Image scaledImage = original.getImage().getScaledInstance(size, size, Image.SCALE_SMOOTH);
+                    scaledImageCache.put(cacheKey, new ImageIcon(scaledImage));
+                }
+            }
+            return scaledImageCache.get(cacheKey);
+        }
+        return imageCache.get(imageName);
+    }
+
+
     public Kitchen(Stove stove) {
+        this.stove = stove;
+        this.burnerButtons = new JToggleButton[stove.getBurners().length];
         burnersPanel.setOpaque(false);
         stovePanel.setBackground(Color.GRAY);
         gbc.fill = GridBagConstraints.BOTH;
@@ -30,22 +90,26 @@ public class Kitchen {
         gbc.weighty = 0.98;
         stovePanel.setBackground(Color.blue);
 
+        preloadImages();
+
         //Stove Panel
         for (int i = 0; i < stove.getBurners().length; i++) {
-            ImageIcon icon = new ImageIcon("Assets/BowlRamen.png");
+            ImageIcon icon = new ImageIcon("Assets/EmptyBowl.png");
             Image image = icon.getImage();
             image = image.getScaledInstance(300, 300, Image.SCALE_DEFAULT);
             icon = new ImageIcon(image);
             JToggleButton button = new JToggleButton(icon);
             button.setPreferredSize(new Dimension(300, 300));
-            stovePanel.add(button);
             button.setBorder(BorderFactory.createEmptyBorder());
             button.setContentAreaFilled(false);
+            burnerButtons[i] = button;
+            stovePanel.add(button);
 
             button.addItemListener(e -> {
                 if (button.isSelected()) {
                     button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
                     button.setBorderPainted(true);
+                    
                 } else {
                     button.setBorderPainted(false);
                 }
@@ -56,69 +120,84 @@ public class Kitchen {
     
         //Ingredients panel
         gbc.gridy = 1;
-        gbc.weightx = 1;
         gbc.weighty = 0.02;
         ingredientsPanel.setPreferredSize(new Dimension(100, 300));
 
         ingredientsPanel.setLayout(new BoxLayout(ingredientsPanel, BoxLayout.Y_AXIS));
+
         JPanel seasoningsPanel = new JPanel();
         JPanel toppingsPanel = new JPanel();
         ingredientsPanel.add(seasoningsPanel);
         ingredientsPanel.add(toppingsPanel);
         
         //First row seasonings
-        
-
         for (int i = 0; i < seasonings.length; i++) {
             ImageIcon icon = new ImageIcon();
             String pathToImage = getSeasoningImage(seasonings[i]);
-            
-            icon = new ImageIcon(pathToImage);
-            Image image = icon.getImage();
-            image = image.getScaledInstance(120, 120, Image.SCALE_DEFAULT);
-            icon = new ImageIcon(image);
-            JToggleButton button = new JToggleButton(icon);
-            button.setPreferredSize(new Dimension(120, 120));
+            JToggleButton button = createIngredientButton(pathToImage);
             seasoningsPanel.add(button);
-            button.setBorder(BorderFactory.createEmptyBorder());
-            button.setContentAreaFilled(false);
 
             button.addItemListener(e -> {
                 if (button.isSelected()) {
                     button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
                     button.setBorderPainted(true);
+                    if (stove.getBurners()[1].getRamen() != null) {
+                        stove.getBurners()[1].getRamen().addWater();
+                    }
                 } else {
                     button.setBorderPainted(false);
                 }
+                updateBurnerImages();
             });
         }
-        
 
         //Second row Toppings
         for (int i = 0; i < toppings.length; i++) {
-            ImageIcon icon = new ImageIcon();
-
             String pathToImage = getToppingImage(toppings[i]);
-            icon = new ImageIcon(pathToImage);
-            Image image = icon.getImage();
-            image = image.getScaledInstance(120, 120, Image.SCALE_DEFAULT);
-            icon = new ImageIcon(image);
-            JToggleButton button = new JToggleButton(icon);
-            button.setPreferredSize(new Dimension(120, 120));
+            JToggleButton button = createIngredientButton(pathToImage);
             toppingsPanel.add(button);
-            button.setBorder(BorderFactory.createEmptyBorder());
-            button.setContentAreaFilled(false);
 
             button.addItemListener(e -> {
                 if (button.isSelected()) {
                     button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
                     button.setBorderPainted(true);
+                    if (stove.getBurners()[1].getRamen() != null) {
+                        stove.getBurners()[1].getRamen().addWater();
+                    }
                 } else {
                     button.setBorderPainted(false);
                 }
+                updateBurnerImages();
             });
             panel.add(ingredientsPanel, gbc);
         }
+    }
+
+    private void updateBurnerImages() {
+        for (int i = 0 ; i < burnerButtons.length; i++) {
+            Ramen ramen = stove.getBurners()[i].getRamen();
+            String state = ramen.getState();
+            String imageName = state.replace(ASSETS_PATH, "");
+            ImageIcon icon = getCachedImage(imageName, 300);
+            System.out.println(imageName);
+
+            burnerButtons[i].setIcon(icon);
+
+        }
+    }
+
+    private JToggleButton createIngredientButton(String pathToImage) {
+        ImageIcon icon = new ImageIcon();
+        icon = new ImageIcon(pathToImage);
+        Image image = icon.getImage();
+        image = image.getScaledInstance(120, 120, Image.SCALE_DEFAULT);
+        icon = new ImageIcon(image);
+        JToggleButton button = new JToggleButton(icon);
+        button.setPreferredSize(new Dimension(120, 120));
+        button.setBorder(BorderFactory.createEmptyBorder());
+        button.setContentAreaFilled(false);
+        return button;
+
     }
 
     private String getSeasoningImage(String s) {
@@ -148,17 +227,17 @@ public class Kitchen {
         switch (s) {
             case ("Shiitake"):
                 return "Assets/ShiitakeMFULL.png";
-            case ( "Pork loin"):
+            case ("Pork loin"):
                 return "Assets/PorkLoin.png";
-            case ( "Fried eggs"):
+            case ("Fried eggs"):
                 return "Assets/Egg.png";
-            case ( "KaraAge chicken"):
+            case ("KaraAge chicken"):
                 return "Assets/KaraAge.png";
-            case ( "Katsu chicken"):
+            case ("Katsu chicken"):
                 return "Assets/Katsu.png";
             case ("Gyoza"):
                 return "Assets/Gyoza.png";
-            case ( "Spring onions"):
+            case ("Spring onions"):
                 return "Assets/SpringOnion.png";
             default:
                 return "Assets/SpringOnion.png";
