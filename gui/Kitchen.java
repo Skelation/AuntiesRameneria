@@ -24,7 +24,10 @@ public class Kitchen implements KeyListener {
             "3x Spicy", "Cheese", "Habanero Lime"};
     String[] toppings = {"Shiitake", "Pork loin", "Fried eggs", "KaraAge chicken",
                 "Katsu chicken", "Gyoza", "Spring onions"};
+
     private int selectedBurnerIndex = 0;
+    private JToggleButton[] seasoningButtons;
+    private JToggleButton[] toppingButtons;
 
     private Map<String, ImageIcon> imageCache = new HashMap<>();
     private Map<String, ImageIcon> scaledImageCache = new HashMap<>();
@@ -82,6 +85,8 @@ public class Kitchen implements KeyListener {
     public Kitchen(Stove stove) {
         this.stove = stove;
         this.burnerButtons = new JToggleButton[stove.getBurners().length];
+        this.seasoningButtons = new JToggleButton[seasonings.length];
+        this.toppingButtons = new JToggleButton[toppings.length];
         burnersPanel.setOpaque(false);
         stovePanel.setBackground(Color.GRAY);
         gbc.fill = GridBagConstraints.BOTH;
@@ -141,9 +146,40 @@ public class Kitchen implements KeyListener {
             JToggleButton button = createIngredientButton(pathToImage);
             seasoningsPanel.add(button);
 
+            seasoningButtons[i] = button;
+            
+            final int seasoningIndex = i;
             button.addActionListener(e -> {
                 Ramen ramen = stove.getBurners()[selectedBurnerIndex].getRamen();
-                boolean added = ramen.addWater();
+                switch (seasoningIndex) {
+                    case (0):
+                        ramen.addWater();
+                        break;
+                    case (1):
+                        ramen.addNoodle();
+                        break;
+                    case (2):
+                        ramen.addSeasoning("Carbonara");
+                        break;
+                    case (3):
+                        ramen.addSeasoning("Hot Chicken");
+                        break;
+                    case (4):
+                        ramen.addSeasoning("2x Spicy");
+                        break;
+                    case (5):
+                        ramen.addSeasoning("3x Spicy");
+                        break;
+                    case (6):
+                        ramen.addSeasoning("Cheese");
+                        break;
+                    case (7):
+                        ramen.addSeasoning("Habanero Lime");
+                        break;
+                    default:
+                        System.out.println("Not handled yet");
+                        break;
+                }
                 updateBurnerImages();
                 focusPanel();
             });
@@ -155,13 +191,39 @@ public class Kitchen implements KeyListener {
         for (int i = 0; i < toppings.length; i++) {
             String pathToImage = getToppingImage(toppings[i]);
             JToggleButton button = createIngredientButton(pathToImage);
+            toppingButtons[i] = button;
             toppingsPanel.add(button);
 
+            final int toppingIndex = i;
             button.addActionListener(e -> {
                 Ramen ramen = stove.getBurners()[selectedBurnerIndex].getRamen();
-                boolean added = ramen.addWater();
+                switch (toppingIndex) {
+                    case (0):
+                        ramen.addTopping("Shiitake");
+                        break;
+                    case (1):
+                        ramen.addTopping("Pork Loin");
+                        break;
+                    case (2):
+                        ramen.addTopping("Fried Eggs");
+                        break;
+                    case (3):
+                        ramen.addTopping("KaraAge Chicken");
+                        break;
+                    case (4):
+                        ramen.addTopping("Katsu Chicken");
+                        break;
+                    case (5):
+                        ramen.addTopping("Gyoza");
+                        break;
+                    case (6):
+                        ramen.addTopping("Spring onions");
+                        break;
+                    default:
+                        System.out.println("Not handled yet");
+                        break;
+                }
                 updateBurnerImages();
-
                 focusPanel();
             });
 
@@ -188,7 +250,6 @@ public class Kitchen implements KeyListener {
             String state = ramen.getState();
             String imageName = state.replace(ASSETS_PATH, "");
             ImageIcon icon = getCachedImage(imageName, 300);
-            System.out.println(imageName);
 
             burnerButtons[i].setIcon(icon);
 

@@ -75,6 +75,9 @@ public class Ramen {
         return this.seasoning;
     }
 
+    public void addTopping(String s) {
+        this.toppings.add(s);
+    }
     public ArrayList<String> getToppings() {
         return this.toppings;
     }
