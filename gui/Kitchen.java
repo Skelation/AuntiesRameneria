@@ -250,9 +250,7 @@ public class Kitchen implements KeyListener {
             String state = ramen.getState();
             String imageName = state.replace(ASSETS_PATH, "");
             ImageIcon icon = getCachedImage(imageName, 300);
-
             burnerButtons[i].setIcon(icon);
-
         }
     }
 

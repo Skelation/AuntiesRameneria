@@ -1,12 +1,14 @@
 package gui;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Random;
 
 import javax.swing.*;
 import models.*;
 
-public class Counter {
+public class Counter implements KeyListener {
     public JPanel panel = new JPanel(new GridBagLayout());
     private JPanel topPanel = new JPanel(new BorderLayout()) {
         private Image backgroundImage = new ImageIcon("Assets/resto.jpg").getImage();
@@ -17,6 +19,11 @@ public class Counter {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
     };
+
+
+    private JToggleButton[] clientButtons;
+    private int selectedClientIndex = 0;
+
     private JPanel bottomPanel = new JPanel();
 
     private JPanel SpacerPanel = new JPanel();
@@ -25,6 +32,20 @@ public class Counter {
     private GridBagConstraints gbc = new GridBagConstraints();
 
     public Counter(Order[] orders) {
+        clientButtons = new JToggleButton[orders.length];
+
+        panel.setFocusable(true);
+        panel.addKeyListener(this);
+
+        // Ensures that keylistener focuses for the panel we are on
+        panel.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent event) {
+                panel.requestFocusInWindow();
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent event) {}
+            public void ancestorMoved(javax.swing.event.AncestorEvent event) {}
+        });
+
         bottomPanel.setBackground(Color.decode("#964B00"));
         SpacerPanel.setOpaque(false);
         clientsPanel.setOpaque(false);
@@ -71,15 +92,63 @@ public class Counter {
             button.setBorder(BorderFactory.createEmptyBorder());
             button.setContentAreaFilled(false);
 
-            button.addItemListener(e -> {
-                if (button.isSelected()) {
-                    button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
-                    button.setBorderPainted(true);
-                } else {
-                    button.setBorderPainted(false);
-                }
-            });
+            clientButtons[i] = button;
             clientsPanel.add(button);
         }
+        updateClientSelection();
+    }
+
+    private void updateClientSelection() {
+        for (int i = 0; i < clientButtons.length; i++) {
+            if (clientButtons[i] != null) {
+                if (i == selectedClientIndex) {
+                    clientButtons[i].setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
+                    clientButtons[i].setBorderPainted(true);
+                } else {
+                    clientButtons[i].setBorderPainted(false);
+                }
+            }
+        }
+        focusPanel();
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_LEFT:
+            if (selectedClientIndex > 0) {
+                selectedClientIndex--;
+                updateClientSelection();
+            }
+            break;
+            case KeyEvent.VK_RIGHT:
+            if (selectedClientIndex< clientButtons.length - 1) {
+                selectedClientIndex++;
+                updateClientSelection();
+            }
+            break;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        //Useless but needed
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        //Useless but needed
+    }
+
+    public int getSelectedClientIndex() {
+        return selectedClientIndex;
+    }
+
+    public void focusPanel() {
+        SwingUtilities.invokeLater(() -> {
+            if (!panel.hasFocus()) {
+                panel.requestFocusInWindow();
+            }
+        });
     }
 }
