@@ -1,15 +1,16 @@
 package gui;
 
-import models.Ramen;
-import models.Stove;
+import models.*;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.*;
 
-public class Kitchen {
+public class Kitchen implements KeyListener {
     private Stove stove;
     private JToggleButton[] burnerButtons;
     public JPanel panel = new JPanel(new GridBagLayout());
@@ -23,6 +24,7 @@ public class Kitchen {
             "3x Spicy", "Cheese", "Habanero Lime"};
     String[] toppings = {"Shiitake", "Pork loin", "Fried eggs", "KaraAge chicken",
                 "Katsu chicken", "Gyoza", "Spring onions"};
+    private int selectedBurnerIndex = 0;
 
     private Map<String, ImageIcon> imageCache = new HashMap<>();
     private Map<String, ImageIcon> scaledImageCache = new HashMap<>();
@@ -90,6 +92,18 @@ public class Kitchen {
         gbc.weighty = 0.98;
         stovePanel.setBackground(Color.blue);
 
+        panel.setFocusable(true);
+        panel.addKeyListener(this);
+        
+        // Ensures that keylistener focuses for the panel we are on
+        panel.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent event) {
+                panel.requestFocusInWindow();
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent event) {}
+            public void ancestorMoved(javax.swing.event.AncestorEvent event) {}
+        });
+
         preloadImages();
 
         //Stove Panel
@@ -104,25 +118,15 @@ public class Kitchen {
             button.setContentAreaFilled(false);
             burnerButtons[i] = button;
             stovePanel.add(button);
-
-            button.addItemListener(e -> {
-                if (button.isSelected()) {
-                    button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
-                    button.setBorderPainted(true);
-                    
-                } else {
-                    button.setBorderPainted(false);
-                }
-            });
         }
-
+        updateBurnerImages();
+        updateBurnerSelection();
         panel.add(stovePanel, gbc);
     
         //Ingredients panel
         gbc.gridy = 1;
         gbc.weighty = 0.02;
         ingredientsPanel.setPreferredSize(new Dimension(100, 300));
-
         ingredientsPanel.setLayout(new BoxLayout(ingredientsPanel, BoxLayout.Y_AXIS));
 
         JPanel seasoningsPanel = new JPanel();
@@ -137,18 +141,14 @@ public class Kitchen {
             JToggleButton button = createIngredientButton(pathToImage);
             seasoningsPanel.add(button);
 
-            button.addItemListener(e -> {
-                if (button.isSelected()) {
-                    button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
-                    button.setBorderPainted(true);
-                    if (stove.getBurners()[1].getRamen() != null) {
-                        stove.getBurners()[1].getRamen().addWater();
-                    }
-                } else {
-                    button.setBorderPainted(false);
-                }
+            button.addActionListener(e -> {
+                Ramen ramen = stove.getBurners()[selectedBurnerIndex].getRamen();
+                boolean added = ramen.addWater();
                 updateBurnerImages();
+                focusPanel();
             });
+
+            panel.add(ingredientsPanel, gbc);
         }
 
         //Second row Toppings
@@ -157,19 +157,28 @@ public class Kitchen {
             JToggleButton button = createIngredientButton(pathToImage);
             toppingsPanel.add(button);
 
-            button.addItemListener(e -> {
-                if (button.isSelected()) {
-                    button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
-                    button.setBorderPainted(true);
-                    if (stove.getBurners()[1].getRamen() != null) {
-                        stove.getBurners()[1].getRamen().addWater();
-                    }
-                } else {
-                    button.setBorderPainted(false);
-                }
+            button.addActionListener(e -> {
+                Ramen ramen = stove.getBurners()[selectedBurnerIndex].getRamen();
+                boolean added = ramen.addWater();
                 updateBurnerImages();
+
+                focusPanel();
             });
+
             panel.add(ingredientsPanel, gbc);
+        }
+    }
+
+    private void updateBurnerSelection() {
+        for (int i = 0; i < burnerButtons.length; i++) {
+            if (burnerButtons[i] != null) {
+                if (i == selectedBurnerIndex) {
+                    burnerButtons[i].setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
+                    burnerButtons[i].setBorderPainted(true);
+                } else {
+                    burnerButtons[i].setBorderPainted(false);
+                }
+            }
         }
     }
 
@@ -242,5 +251,45 @@ public class Kitchen {
             default:
                 return "Assets/SpringOnion.png";
         }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_LEFT:
+            if (selectedBurnerIndex > 0) {
+                selectedBurnerIndex--;
+                updateBurnerSelection();
+            }
+            break;
+            case KeyEvent.VK_RIGHT:
+            if (selectedBurnerIndex < burnerButtons.length - 1) {
+                selectedBurnerIndex++;
+                updateBurnerSelection();
+            }
+            break;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        //Useless but needed
+    }
+    
+    @Override
+    public void keyTyped(KeyEvent e) {
+        //Useless but needed
+    }
+
+    public int getSelectedBurnerIndex() {
+        return selectedBurnerIndex;
+    }
+    
+    public void focusPanel() {
+        SwingUtilities.invokeLater(() -> {
+            if (!panel.hasFocus()) {
+                panel.requestFocusInWindow();
+            }
+        });
     }
 }
