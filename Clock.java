@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.LongConsumer;
@@ -6,7 +7,7 @@ public class Clock implements Runnable {
     private volatile boolean running = true;
     private long time = 0;
     private LongConsumer tickListener;
-    public Set<Long> eventTimes = new HashSet<>();
+    public HashMap<Long, String> eventTimes = new HashMap<>();
 
     public void setListener(LongConsumer listener) {
         this.tickListener = listener;

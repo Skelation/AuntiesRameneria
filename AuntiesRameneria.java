@@ -1,17 +1,22 @@
+import java.util.*;
+
 public class AuntiesRameneria {
     private Clock clock;
+    int orderNumbers = 0;
 
     private void run() {
-        Stove stove = new Stove();
-        Order[] orders = new Order[3];
+        // Stove stove = new Stove();
+        ArrayList<Order> orders = new ArrayList<>();
 
         clock = new Clock();
 
-        clock.eventTimes.add(5L);
+        takeOrders(orders, clock);
+        
+        clock.eventTimes.put(5L, "check");
 
         clock.setListener(time -> {
-            if (clock.eventTimes.contains(time)) {
-                System.out.println("Lets go " + time);
+            if (clock.eventTimes.keySet().contains(time)) {
+                System.out.println("Lets go " + time); 
             }
         });
 
@@ -25,6 +30,16 @@ public class AuntiesRameneria {
             } catch (InterruptedException err) {
                 Thread.currentThread().interrupt();
             }
+        }
+    }
+
+    public void takeOrders(ArrayList<Order> orders, Clock clock) {
+        while (orders.size() < 3) {
+            Order newOrder = (new Order()).newOrder();
+            orderNumbers = orderNumbers + 1;
+            newOrder.setOrderNumber(orderNumbers);
+            orders.add(newOrder);
+            clock.eventTimes.put(120L, String.format("CheckDoneOrder%d", orderNumbers));
         }
     }
 

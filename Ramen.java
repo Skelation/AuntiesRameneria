@@ -8,8 +8,8 @@ class Ramen {
     private boolean hasSeasoningOil;
     private int timeCooked;
     private boolean isBurnt;
-    private String seasoning;
-    private ArrayList<String> toppings;
+    private String seasoning = "";
+    private ArrayList<String> toppings = new ArrayList<>();
 
     public boolean cook() {
         if (this.isCooked) {
@@ -59,7 +59,7 @@ class Ramen {
         int numberOfToppings = (new Random()).nextInt(allToppings.size());
         
         for (int i = 0; i < numberOfToppings; i++) {
-            randomRamen.toppings.add(toppings.get((new Random()).nextInt(toppings.size())));
+            randomRamen.toppings.add(allToppings.get((new Random()).nextInt(allToppings.size())));
         }
 
         randomRamen.addNoodle();

@@ -3,6 +3,7 @@ import java.util.Random;
 public class Order {
     private Ramen ramen = new Ramen();
     private Drink drink = new Drink();
+    private int orderNumber = 0;
     
     public void setRamen(Ramen ramen) {
         this.ramen = ramen;
@@ -12,12 +13,20 @@ public class Order {
         this.drink = drink;
     }
 
+    public void setOrderNumber(int orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
     public Ramen getRamen() {
         return this.ramen;
     }
 
     public Drink getDrink() {
         return this.drink;
+    }
+
+    public int getOrderNumber() {
+        return this.orderNumber;
     }
 
     public Order newOrder() {
