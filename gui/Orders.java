@@ -9,7 +9,7 @@ public class Orders {
 
     public Orders(Order[] orders) {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBackground(Color.red);
+        panel.setBackground(Color.GRAY);
 
         panel.add(Box.createVerticalStrut(5));
         for (int i = 0; i < orders.length; i++) {
@@ -25,12 +25,20 @@ public class Orders {
             content.add(new JLabel("+ " + topping));
         }
 
-        JButton button = new JButton();
+        JToggleButton button = new JToggleButton();
         button.setLayout(new BorderLayout());
         button.add(content, BorderLayout.CENTER);
 
         button.setAlignmentX(Component.LEFT_ALIGNMENT);
         button.setMaximumSize(new Dimension(Integer.MAX_VALUE, button.getPreferredSize().height));
+        button.addItemListener(e -> {
+                if (button.isSelected()) {
+                    button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
+                    button.setBorderPainted(true);
+                } else {
+                    button.setBorderPainted(false);
+                }
+            });
 
         panel.add(button);
         panel.add(Box.createVerticalStrut(5));

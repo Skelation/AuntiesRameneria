@@ -7,6 +7,7 @@ import java.util.Random;
 public class Ramen {
     private boolean isCooked;
     private boolean hasNoodle;
+    private boolean hasWater;
     private boolean hasSeasoningOil;
     private int timeCooked;
     private boolean isBurnt;
@@ -32,20 +33,34 @@ public class Ramen {
         }
     }
 
+    public boolean addWater() {
+        if (this.hasWater) {
+            return false;
+        } else {
+            this.hasWater = true;
+            return true;
+        }
+    }
+
+    public String getState() {
+        String path = "Assets/";
+        if (this.hasWater && this.hasNoodle && this.isCooked) {
+            return path + "BowlRamen.png";
+        } else if (this.hasWater && this.hasNoodle) {
+            return path + "BowlRawRamen.png";
+        } else if (this.hasWater) {
+            return path + "BowlWater.png";
+        } else {
+            return path + "EmptyBowl.png";
+        }
+    }
+
     public Ramen addSeasoning(String seasoning) {
         if (this.seasoning.isEmpty()) {
             this.seasoning = seasoning;
         }
         return this;
     }
-
-    // //TODO Can have multiple toppings
-    // public Ramen addTopping(String topping) {
-    //     if (this.toppings.size() == 0) {
-    //         this.toppings.add(topping);
-    //     }
-    //     return this;
-    // }
 
     public boolean addSeasoningOil() {
         if (this.hasSeasoningOil) {
@@ -60,6 +75,9 @@ public class Ramen {
         return this.seasoning;
     }
 
+    public void addTopping(String s) {
+        this.toppings.add(s);
+    }
     public ArrayList<String> getToppings() {
         return this.toppings;
     }
