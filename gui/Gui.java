@@ -22,7 +22,7 @@ public class Gui {
     private JPanel Orders;
     public Orders ordersPanel;
     private JPanel Counter;
-    private Counter counterPanel;
+    public Counter counterPanel;
 
     public Gui(Order[] orders, Stove stove) {
         // Orders = new gui.Orders(orders).panel;

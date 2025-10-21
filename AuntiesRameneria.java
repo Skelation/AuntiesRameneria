@@ -81,6 +81,8 @@ public class AuntiesRameneria {
             newOrder.setOrderNumber(orderNumbers);
             orders.add(newOrder);
             clock.eventTimes.put(120L, String.format("TimeDoneOrder%d", orderNumbers));
+            gui.counterPanel.addClient();
+            gui.ordersPanel.addOrder(newOrder);
         }
     }
 

@@ -3,6 +3,8 @@ package gui;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.*;
@@ -21,7 +23,7 @@ public class Counter implements KeyListener {
     };
 
 
-    private JToggleButton[] clientButtons;
+    private List<JButton> clientButtons;
     private int selectedClientIndex = 0;
 
     private JPanel bottomPanel = new JPanel();
@@ -32,7 +34,7 @@ public class Counter implements KeyListener {
     private GridBagConstraints gbc = new GridBagConstraints();
 
     public Counter(Order[] orders) {
-        clientButtons = new JToggleButton[orders.length];
+        clientButtons = new ArrayList<>();
 
         panel.setFocusable(true);
         panel.addKeyListener(this);
@@ -65,47 +67,54 @@ public class Counter implements KeyListener {
         topPanel.add(clientsPanel, BorderLayout.SOUTH);
 
         for (int i = 0; i < orders.length; i++) {
-            ImageIcon icon = new ImageIcon();
-            Random r = new Random();
-            int n = r.nextInt(0, 2);
-            switch (n) {
-                case 0:
-                    icon = new ImageIcon("Assets/FatMan.png");
-                    break;
-                case 1:
-                    icon = new ImageIcon("Assets/Littlewoman.png");
-                    break;
-                case 2:
-                    icon = new ImageIcon("Assets/SlimMan.png");
-                    break;
-                default:
-                    icon = new ImageIcon("Assets/FatMan.png");
-                    break;
-            }
-            Image image = icon.getImage();
-            image = image.getScaledInstance(500, 500, Image.SCALE_DEFAULT);
-            icon = new ImageIcon(image);
-
-            JToggleButton button = new JToggleButton(icon);
-            button.setPreferredSize(new Dimension(500, 500));
-            panel.add(button);
-            button.setBorder(BorderFactory.createEmptyBorder());
-            button.setContentAreaFilled(false);
-
-            clientButtons[i] = button;
-            clientsPanel.add(button);
+            addClient();
         }
         updateClientSelection();
     }
 
+    public void addClient() {
+        ImageIcon icon = new ImageIcon();
+        Random r = new Random();
+        int n = r.nextInt(0, 2);
+        switch (n) {
+            case 0:
+            icon = new ImageIcon("Assets/FatMan.png");
+            break;
+            case 1:
+            icon = new ImageIcon("Assets/Littlewoman.png");
+            break;
+            case 2:
+            icon = new ImageIcon("Assets/SlimMan.png");
+            break;
+            default:
+            icon = new ImageIcon("Assets/FatMan.png");
+            break;
+        }
+        Image image = icon.getImage();
+        image = image.getScaledInstance(500, 500, Image.SCALE_DEFAULT);
+        icon = new ImageIcon(image);
+
+        JButton button = new JButton(icon);
+        button.setPreferredSize(new Dimension(500, 500));
+        panel.add(button);
+        button.setBorder(BorderFactory.createEmptyBorder());
+        button.setContentAreaFilled(false);
+
+        clientButtons.add(button);
+        clientsPanel.add(button);
+
+        clientsPanel.revalidate();
+        clientsPanel.repaint();
+    }
+
     private void updateClientSelection() {
-        for (int i = 0; i < clientButtons.length; i++) {
-            if (clientButtons[i] != null) {
+        for (int i = 0; i < clientButtons.size(); i++) {
+            if (clientButtons.get(i) != null) {
                 if (i == selectedClientIndex) {
-                    clientButtons[i].setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
-                    clientButtons[i].setBorderPainted(true);
+                    clientButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
+                    clientButtons.get(i).setBorderPainted(true);
                 } else {
-                    clientButtons[i].setBorderPainted(false);
+                    clientButtons.get(i).setBorderPainted(false);
                 }
             }
         }
@@ -122,7 +131,7 @@ public class Counter implements KeyListener {
             }
             break;
             case KeyEvent.VK_RIGHT:
-            if (selectedClientIndex< clientButtons.length - 1) {
+            if (selectedClientIndex< clientButtons.size() - 1) {
                 selectedClientIndex++;
                 updateClientSelection();
             }
