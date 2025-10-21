@@ -8,7 +8,7 @@ public class Ramen {
     private boolean isCooked;
     private boolean hasNoodle;
     private boolean hasWater;
-    private boolean hasSeasoningOil;
+    // private boolean hasSeasoningOil;
     private int timeCooked;
     private boolean isBurnt;
     private String seasoning = "";
@@ -62,14 +62,14 @@ public class Ramen {
         return this;
     }
 
-    public boolean addSeasoningOil() {
-        if (this.hasSeasoningOil) {
-            return false;
-        } else {
-            this.hasSeasoningOil = true;
-            return true;
-        }
-    }
+    // public boolean addSeasoningOil() {
+    //     if (this.hasSeasoningOil) {
+    //         return false;
+    //     } else {
+    //         this.hasSeasoningOil = true;
+    //         return true;
+    //     }
+    // }
 
     public String getSeasoning() {
         return this.seasoning;
@@ -99,11 +99,60 @@ public class Ramen {
             randomRamen.toppings.add(allToppings.get((new Random()).nextInt(allToppings.size())));
         }
 
+        randomRamen.addWater();
         randomRamen.addNoodle();
         randomRamen.cook();
         randomRamen.addSeasoning(seasoning);
-        randomRamen.addSeasoningOil();
+        // randomRamen.addSeasoningOil();
 
         return randomRamen;
+    }
+
+    public String getDescription() {
+        String desc = "";
+        desc += "Has Water: " +this.hasWater + "\n";
+        desc += "Has Noodle: " +this.hasNoodle + "\n";
+        desc += "CookedState: " + this.isCooked + "\n";
+        desc += "BurnedState: " + this.isBurnt + "\n";
+        desc += "Seasoning: " + this.seasoning + "\n";
+        desc += "Cooking time: " + this.timeCooked + "\n";
+        desc += "Topppings:\n";
+        for (int i = 0; i < this.toppings.size(); i++) {
+            desc += "   " + this.toppings.get(i) + "\n";
+        }
+        return desc;
+    }
+
+    public boolean matches(Ramen ramen) {
+        if (!(this.hasWater == ramen.hasWater)) {
+            return false;
+        }
+
+        if (!(this.hasNoodle == ramen.hasNoodle)) {
+            return false;
+        }
+
+        if (!(this.isCooked == ramen.isCooked)) {
+            return false;
+        }
+         
+        if (!(this.isBurnt == ramen.isBurnt)) {
+            return false;
+        }
+
+        if (!(this.seasoning.equals(ramen.seasoning))) {
+            return false;
+        }
+
+        if (this.toppings.size() != ramen.toppings.size()) {
+            return false;
+        }
+        
+        for (int i = 0; i < this.toppings.size(); i++) {
+            if (!ramen.toppings.contains(this.toppings.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }
