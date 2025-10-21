@@ -18,22 +18,25 @@ public class Gui {
 
     private JPanel Kitchen;
     private Kitchen kitchenPanel;
-    private JPanel Fridge = new gui.Fridge().panel;
+    private JPanel Fridge;
+    private Fridge fridgePanel;
     private JPanel Orders;
     public Orders ordersPanel;
     private JPanel Counter;
     public Counter counterPanel;
 
     public Gui(Order[] orders, Stove stove) {
-        // Orders = new gui.Orders(orders).panel;
-        ordersPanel = new Orders(orders);
-        Orders = ordersPanel.panel;
-
         counterPanel = new Counter(orders);
         Counter = counterPanel.panel;
 
         kitchenPanel = new Kitchen(stove);
         Kitchen = kitchenPanel.panel;
+
+        fridgePanel = new Fridge();
+        Fridge = fridgePanel.panel;
+
+        ordersPanel = new Orders(orders, tabbedPane, kitchenPanel, counterPanel, fridgePanel);
+        Orders = ordersPanel.panel;
        
         frame = new JFrame();
         frame.setTitle("Auntie's Rameneria");

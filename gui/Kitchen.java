@@ -202,16 +202,16 @@ public class Kitchen implements KeyListener {
                         ramen.addTopping("Shiitake");
                         break;
                     case (1):
-                        ramen.addTopping("Pork Loin");
+                        ramen.addTopping("Pork loin");
                         break;
                     case (2):
-                        ramen.addTopping("Fried Eggs");
+                        ramen.addTopping("Fried eggs");
                         break;
                     case (3):
-                        ramen.addTopping("KaraAge Chicken");
+                        ramen.addTopping("KaraAge chicken");
                         break;
                     case (4):
-                        ramen.addTopping("Katsu Chicken");
+                        ramen.addTopping("Katsu chicken");
                         break;
                     case (5):
                         ramen.addTopping("Gyoza");
@@ -244,7 +244,7 @@ public class Kitchen implements KeyListener {
         }
     }
 
-    private void updateBurnerImages() {
+    public void updateBurnerImages() {
         for (int i = 0 ; i < burnerButtons.length; i++) {
             Ramen ramen = stove.getBurners()[i].getRamen();
             String state = ramen.getState();
@@ -350,5 +350,13 @@ public class Kitchen implements KeyListener {
                 panel.requestFocusInWindow();
             }
         });
+    }
+
+    public Stove getStove() {
+        return this.stove; 
+    }
+
+    public void setStove(Stove stove) {
+        this.stove = stove;
     }
 }

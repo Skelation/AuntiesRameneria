@@ -28,4 +28,8 @@ public class Burner {
             this.isOn = true;
         }
     }
+
+    public void reset() {
+        this.ramen = new Ramen();
+    }
 }
