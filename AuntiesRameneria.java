@@ -39,7 +39,7 @@ public class AuntiesRameneria {
             orderNumbers = orderNumbers + 1;
             newOrder.setOrderNumber(orderNumbers);
             orders.add(newOrder);
-            clock.eventTimes.put(120L, String.format("CheckDoneOrder%d", orderNumbers));
+            clock.eventTimes.put(120L, String.format("TiemDoneOrder%d", orderNumbers));
         }
     }
 
