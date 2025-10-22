@@ -26,6 +26,7 @@ public class Counter implements KeyListener {
 
 
     private Map<Integer, JButton> clientButtons;
+    private List<JButton> clientList = new ArrayList<>();
     private int selectedClientIndex = 0;
 
     private JPanel bottomPanel = new JPanel();
@@ -75,9 +76,15 @@ public class Counter implements KeyListener {
     }
 
     public void removeClient(int orderNumber) {
-        System.out.println("Removing client number " + orderNumber);
         JButton button = clientButtons.remove(orderNumber);
-        clientsPanel.remove(button);
+        if (button != null) {
+            clientList.remove(button);
+            clientsPanel.remove(button);
+        }
+
+        if (selectedClientIndex >= clientList.size()) {
+            selectedClientIndex = Math.max(0, clientList.size() - 1);
+        }
 
         panel.revalidate();
         panel.repaint();
@@ -114,21 +121,22 @@ public class Counter implements KeyListener {
         button.setContentAreaFilled(false);
 
         clientButtons.put(orderNumber, button);
+        clientList.add(button);
         clientsPanel.add(button);
 
         clientsPanel.revalidate();
         clientsPanel.repaint();
+        updateClientSelection();
     }
 
     private void updateClientSelection() {
-        for (int i = 0; i < clientButtons.size(); i++) {
-            if (clientButtons.get(i) != null) {
-                if (i == selectedClientIndex) {
-                    clientButtons.get(i).setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
-                    clientButtons.get(i).setBorderPainted(true);
-                } else {
-                    clientButtons.get(i).setBorderPainted(false);
-                }
+        for (int i = 0; i < clientList.size(); i++) {
+            JButton button = clientList.get(i);
+            if (i == selectedClientIndex) {
+                button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
+                button.setBorderPainted(true);
+            } else {
+                button.setBorderPainted(false);
             }
         }
         focusPanel();
@@ -144,7 +152,7 @@ public class Counter implements KeyListener {
             }
             break;
             case KeyEvent.VK_RIGHT:
-            if (selectedClientIndex< clientButtons.size() - 1) {
+            if (selectedClientIndex< clientList.size() - 1) {
                 selectedClientIndex++;
                 updateClientSelection();
             }
