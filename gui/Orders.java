@@ -15,20 +15,25 @@ import java.util.Map;
 
 public class Orders {
     public JPanel panel = new JPanel();
+    public JPanel orderPanel = new JPanel();
+    public JPanel moneyPanel = new JPanel();
     private JTabbedPane jTabbedPane;
     private Kitchen kitchenPanel;
     private Counter counterPanel;
     private Fridge fridgePanel;
     private ArrayList<Order> orders;
     private Map<Integer, JButton> orderButtons;
+    private Bank bank;
 
-    public Orders(ArrayList<Order> orders, JTabbedPane tabbedPane, Kitchen kitchenPanel, Counter counterPanel, Fridge fridgePanel) {
+    public Orders(ArrayList<Order> orders, JTabbedPane tabbedPane, Kitchen kitchenPanel, Counter counterPanel, Fridge fridgePanel, Bank bank) {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBackground(Color.GRAY);
+        orderPanel.setLayout(new BoxLayout(orderPanel, BoxLayout.Y_AXIS));
+        orderPanel.setBackground(Color.GRAY);
+        this.bank = bank;
 
-        panel.add(Box.createVerticalStrut(5));
+        orderPanel.add(Box.createVerticalStrut(5));
         for (int i = 0; i < orders.size(); i++) {
-            addOrder(orders.get(i));
+            addOrder(orders.get(i), bank);
         }
         jTabbedPane = tabbedPane;
         this.kitchenPanel = kitchenPanel;
@@ -36,6 +41,11 @@ public class Orders {
         this.fridgePanel = fridgePanel;
         this.orders = orders;
         this.orderButtons = new HashMap<>();
+        
+        int balance = bank.getBalance();
+        moneyPanel.add(new JLabel(String.valueOf(balance)));
+        panel.add(orderPanel);
+        panel.add(moneyPanel);
     }
 
     public void removeOrder(Order order) {
@@ -44,15 +54,15 @@ public class Orders {
 
         JButton button = orderButtons.remove(orderNumber);
         SwingUtilities.invokeLater(() -> {
-            panel.remove(button);
-            panel.revalidate();
-            panel.repaint();
+            orderPanel.remove(button);
+            orderPanel.revalidate();
+            orderPanel.repaint();
         });
 
         System.out.println("Order removed " + orderNumber);
     }
 
-    public void addOrder(Order order) {
+    public void addOrder(Order order, Bank bank) {
         JPanel content = new JPanel();
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
         content.add(new JLabel(order.getRamen().getSeasoning()));
@@ -79,12 +89,14 @@ public class Orders {
                     Burner[] burners = stove.getBurners();
                     Ramen selectedRamen = burners[kitchenPanel.getSelectedBurnerIndex()].getRamen();
                     if (selectedRamen.matches(order.getRamen())) {
-                        // System.out.println("Same Order");
+                        System.out.println("Same Order");
+                        bank.addAmount(10);
                         removeOrder(order);
                         counterPanel.removeClient(order.getOrderNumber());
                     } else {
                         // System.out.printf("Order Ramen:\n%s \n\nSelectedRamen: \n%s", order.getRamen().getDescription(), selectedRamen.getDescription());
-                        // System.out.println("Different");
+                        System.out.println("Different");
+                        bank.removeAmount(10);
                         removeOrder(order);
                         counterPanel.removeClient(order.getOrderNumber());
                     }
@@ -97,8 +109,8 @@ public class Orders {
             }
         });
 
-        panel.add(button);
-        panel.add(Box.createVerticalStrut(5));
+        orderPanel.add(button);
+        orderPanel.add(Box.createVerticalStrut(5));
         orderButtons.put(order.getOrderNumber(), button);
 
         panel.revalidate();
