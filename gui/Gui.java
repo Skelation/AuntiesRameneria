@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 import models.*;
 
@@ -25,7 +26,7 @@ public class Gui {
     private JPanel Counter;
     public Counter counterPanel;
 
-    public Gui(Order[] orders, Stove stove) {
+    public Gui(ArrayList<Order> orders, Stove stove) {
         counterPanel = new Counter(orders);
         Counter = counterPanel.panel;
 

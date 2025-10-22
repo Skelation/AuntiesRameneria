@@ -4,7 +4,9 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.swing.*;
@@ -23,7 +25,7 @@ public class Counter implements KeyListener {
     };
 
 
-    private List<JButton> clientButtons;
+    private Map<Integer, JButton> clientButtons;
     private int selectedClientIndex = 0;
 
     private JPanel bottomPanel = new JPanel();
@@ -33,8 +35,8 @@ public class Counter implements KeyListener {
 
     private GridBagConstraints gbc = new GridBagConstraints();
 
-    public Counter(Order[] orders) {
-        clientButtons = new ArrayList<>();
+    public Counter(ArrayList<Order> orders) {
+        clientButtons = new HashMap<>();
 
         panel.setFocusable(true);
         panel.addKeyListener(this);
@@ -66,13 +68,24 @@ public class Counter implements KeyListener {
         topPanel.add(SpacerPanel, BorderLayout.CENTER);
         topPanel.add(clientsPanel, BorderLayout.SOUTH);
 
-        for (int i = 0; i < orders.length; i++) {
-            addClient();
+        for (int i = 0; i < orders.size(); i++) {
+            addClient(orders.get(i).getOrderNumber());
         }
         updateClientSelection();
     }
 
-    public void addClient() {
+    public void removeClient(int orderNumber) {
+        System.out.println("Removing client number " + orderNumber);
+        JButton button = clientButtons.remove(orderNumber);
+        clientsPanel.remove(button);
+
+        panel.revalidate();
+        panel.repaint();
+        updateClientSelection();
+    }
+
+    public void addClient(int orderNumber) {
+        System.out.println("Adding client number " + orderNumber);
         ImageIcon icon = new ImageIcon();
         Random r = new Random();
         int n = r.nextInt(0, 2);
@@ -100,7 +113,7 @@ public class Counter implements KeyListener {
         button.setBorder(BorderFactory.createEmptyBorder());
         button.setContentAreaFilled(false);
 
-        clientButtons.add(button);
+        clientButtons.put(orderNumber, button);
         clientsPanel.add(button);
 
         clientsPanel.revalidate();

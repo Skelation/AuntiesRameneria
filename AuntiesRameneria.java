@@ -1,5 +1,7 @@
 import java.util.*;
 
+import javax.swing.SwingUtilities;
+
 import gui.Gui;
 import models.*;
 
@@ -14,10 +16,9 @@ public class AuntiesRameneria {
     private void run() {
         stove = new Stove();
         orders = new ArrayList<>();
-        Order[] initialOrders = {};
         clock = new Clock();
 
-        gui = new Gui(initialOrders, stove);
+        gui = new Gui(orders, stove);
 
         startClock();
 
@@ -28,10 +29,6 @@ public class AuntiesRameneria {
     }
 
     private void startClock() {
-        // if (running) {
-        //     return;
-        // }
-        
         running = true;
         
         clock.setListener(time -> {
@@ -47,7 +44,6 @@ public class AuntiesRameneria {
             while (running) {
                 try {
                     Thread.sleep(1010);
-                    System.out.println(clock.getTime());
                 } catch (InterruptedException err) {
                     Thread.currentThread().interrupt();
                     break;
@@ -73,16 +69,43 @@ public class AuntiesRameneria {
         clock.eventTimes.put(time, event);
     }
 
+    // public void takeOrders(ArrayList<Order> orders, Clock clock) {
+    //     while (orders.size() < 3) {
+    //         Order newOrder = (new Order()).newOrder();
+    //         orderNumbers = orderNumbers + 1;
+    //         System.out.println("New Order " + orderNumbers);
+    //         newOrder.setOrderNumber(orderNumbers);
+    //         orders.add(newOrder);
+    //         clock.eventTimes.put(120L, String.format("TimeDoneOrder%d", orderNumbers));
+    //         gui.counterPanel.addClient();
+    //         gui.ordersPanel.addOrder(newOrder);
+    //     }
+    // }
+
     public void takeOrders(ArrayList<Order> orders, Clock clock) {
-        while (orders.size() < 3) {
-            Order newOrder = (new Order()).newOrder();
-            orderNumbers = orderNumbers + 1;
-            System.out.println("New Order " + orderNumbers);
-            newOrder.setOrderNumber(orderNumbers);
-            orders.add(newOrder);
-            clock.eventTimes.put(120L, String.format("TimeDoneOrder%d", orderNumbers));
-            gui.counterPanel.addClient();
-            gui.ordersPanel.addOrder(newOrder);
+        while (true) {
+            synchronized (orders) {
+                if (orders.size() < 3) {
+                    Order newOrder = (new Order()).newOrder();
+                    orderNumbers++;
+                    System.out.println("New Order " + orderNumbers);
+                    newOrder.setOrderNumber(orderNumbers);
+                    orders.add(newOrder);
+                    clock.eventTimes.put(120L, String.format("TimeDoneOrder%d", orderNumbers));
+
+                    SwingUtilities.invokeLater(() -> {
+                        gui.counterPanel.addClient(orderNumbers);
+                        gui.ordersPanel.addOrder(newOrder);
+                    });
+                }
+            }
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
         }
     }
 
