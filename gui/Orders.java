@@ -9,6 +9,9 @@ import gui.Kitchen;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Orders {
     public JPanel panel = new JPanel();
@@ -16,19 +19,37 @@ public class Orders {
     private Kitchen kitchenPanel;
     private Counter counterPanel;
     private Fridge fridgePanel;
+    private ArrayList<Order> orders;
+    private Map<Integer, JButton> orderButtons;
 
-    public Orders(Order[] orders, JTabbedPane tabbedPane, Kitchen kitchenPanel, Counter counterPanel, Fridge fridgePanel) {
+    public Orders(ArrayList<Order> orders, JTabbedPane tabbedPane, Kitchen kitchenPanel, Counter counterPanel, Fridge fridgePanel) {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(Color.GRAY);
 
         panel.add(Box.createVerticalStrut(5));
-        for (int i = 0; i < orders.length; i++) {
-            addOrder(orders[i]);
+        for (int i = 0; i < orders.size(); i++) {
+            addOrder(orders.get(i));
         }
         jTabbedPane = tabbedPane;
         this.kitchenPanel = kitchenPanel;
         this.counterPanel = counterPanel;
         this.fridgePanel = fridgePanel;
+        this.orders = orders;
+        this.orderButtons = new HashMap<>();
+    }
+
+    public void removeOrder(Order order) {
+        int orderNumber = order.getOrderNumber();
+        orders.remove(order);
+
+        JButton button = orderButtons.remove(orderNumber);
+        SwingUtilities.invokeLater(() -> {
+            panel.remove(button);
+            panel.revalidate();
+            panel.repaint();
+        });
+
+        System.out.println("Order removed " + orderNumber);
     }
 
     public void addOrder(Order order) {
@@ -51,30 +72,34 @@ public class Orders {
                 int tabIndex = jTabbedPane.getSelectedIndex();
                 switch (tabIndex) {
                     case 0:
-                        System.out.println("Interacting with counter");
-                        break;
+                    System.out.println("Interacting with counter");
+                    break;
                     case 1:
-                        Stove stove = kitchenPanel.getStove();
-                        Burner[] burners = stove.getBurners();
-                        Ramen selectedRamen = burners[kitchenPanel.getSelectedBurnerIndex()].getRamen();
-                        selectedRamen.cook();
-                        if (selectedRamen.matches(order.getRamen())) {
-                            // System.out.println("Same Order");
-                            
-                        } else {
-                            // System.out.printf("Order Ramen:\n%s \n\nSelectedRamen: \n%s", order.getRamen().getDescription(), selectedRamen.getDescription());
-                            // System.out.println("Different");
-                        }
+                    Stove stove = kitchenPanel.getStove();
+                    Burner[] burners = stove.getBurners();
+                    Ramen selectedRamen = burners[kitchenPanel.getSelectedBurnerIndex()].getRamen();
+                    if (selectedRamen.matches(order.getRamen())) {
+                        // System.out.println("Same Order");
+                        removeOrder(order);
+                        counterPanel.removeClient(order.getOrderNumber());
+                    } else {
+                        // System.out.printf("Order Ramen:\n%s \n\nSelectedRamen: \n%s", order.getRamen().getDescription(), selectedRamen.getDescription());
+                        // System.out.println("Different");
+                        removeOrder(order);
+                        counterPanel.removeClient(order.getOrderNumber());
+                    }
                     burners[kitchenPanel.getSelectedBurnerIndex()].reset();
                     kitchenPanel.updateBurnerImages();
+                    kitchenPanel.focusPanel();
                     default:
-                        break;
+                    break;
                 }
             }
         });
 
         panel.add(button);
         panel.add(Box.createVerticalStrut(5));
+        orderButtons.put(order.getOrderNumber(), button);
 
         panel.revalidate();
         panel.repaint();

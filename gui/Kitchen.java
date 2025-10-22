@@ -316,16 +316,22 @@ public class Kitchen implements KeyListener {
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_LEFT:
-            if (selectedBurnerIndex > 0) {
-                selectedBurnerIndex--;
-                updateBurnerSelection();
-            }
+                if (selectedBurnerIndex > 0) {
+                    selectedBurnerIndex--;
+                    updateBurnerSelection();
+                }
             break;
             case KeyEvent.VK_RIGHT:
-            if (selectedBurnerIndex < burnerButtons.length - 1) {
-                selectedBurnerIndex++;
-                updateBurnerSelection();
-            }
+                if (selectedBurnerIndex < burnerButtons.length - 1) {
+                    selectedBurnerIndex++;
+                    updateBurnerSelection();
+                }
+            break;
+            case KeyEvent.VK_ENTER:
+                Ramen selectedRamen = stove.getBurners()[selectedBurnerIndex].getRamen();
+                selectedRamen.cook();
+                System.out.println("Cooking ramen n." +selectedRamen);
+                updateBurnerImages();
             break;
         }
     }
