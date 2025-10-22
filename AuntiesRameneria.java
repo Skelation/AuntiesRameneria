@@ -12,13 +12,15 @@ public class AuntiesRameneria {
     public ArrayList<Order> orders;
     private Gui gui;
     private Stove stove;
+    private Bank bank;
 
     private void run() {
         stove = new Stove();
         orders = new ArrayList<>();
         clock = new Clock();
+        bank = new Bank();
 
-        gui = new Gui(orders, stove);
+        gui = new Gui(orders, stove, bank);
 
         startClock();
 
@@ -95,7 +97,7 @@ public class AuntiesRameneria {
 
                     SwingUtilities.invokeLater(() -> {
                         gui.counterPanel.addClient(orderNumbers);
-                        gui.ordersPanel.addOrder(newOrder);
+                        gui.ordersPanel.addOrder(newOrder, bank);
                     });
                 }
             }
