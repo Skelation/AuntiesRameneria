@@ -1,6 +1,7 @@
 package models;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.LongConsumer;
 
 public class Clock implements Runnable {
@@ -32,5 +33,16 @@ public class Clock implements Runnable {
 
     public void stop() {
         running = false;
+    }
+
+    public void deleteEvent(int orderNumber) {
+        for (Map.Entry<Long, String> entry : eventTimes.entrySet()) {
+            if (entry.getValue().contains("TimeDoneOrder " + String.valueOf(orderNumber))) {
+                System.out.println("Deleting order number " + orderNumber);
+                eventTimes.remove(entry.getKey());
+                System.out.println("Value of entry selected " + entry.getValue());
+                System.out.println("All events " + eventTimes);
+            } 
+        }
     }
 }
