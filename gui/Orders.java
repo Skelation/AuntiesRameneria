@@ -24,6 +24,7 @@ public class Orders {
     private ArrayList<Order> orders;
     private Map<Integer, JButton> orderButtons;
     private Bank bank;
+    private JLabel balanceLabel;
 
     public Orders(ArrayList<Order> orders, JTabbedPane tabbedPane, Kitchen kitchenPanel, Counter counterPanel, Fridge fridgePanel, Bank bank) {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -41,9 +42,10 @@ public class Orders {
         this.fridgePanel = fridgePanel;
         this.orders = orders;
         this.orderButtons = new HashMap<>();
+        balanceLabel = new JLabel();
+        balanceLabel.setText(String.valueOf(bank.getBalance()));
         
-        int balance = bank.getBalance();
-        moneyPanel.add(new JLabel(String.valueOf(balance)));
+        moneyPanel.add(balanceLabel);
         panel.add(orderPanel);
         panel.add(moneyPanel);
     }
@@ -91,12 +93,18 @@ public class Orders {
                     if (selectedRamen.matches(order.getRamen())) {
                         System.out.println("Same Order");
                         bank.addAmount(10);
+                        balanceLabel.setText(String.valueOf(bank.getBalance()));
+                        moneyPanel.revalidate();
+                        moneyPanel.repaint();
                         removeOrder(order);
                         counterPanel.removeClient(order.getOrderNumber());
                     } else {
-                        // System.out.printf("Order Ramen:\n%s \n\nSelectedRamen: \n%s", order.getRamen().getDescription(), selectedRamen.getDescription());
+                        System.out.printf("Order Ramen:\n%s \n\nSelectedRamen: \n%s", order.getRamen().getDescription(), selectedRamen.getDescription());
                         System.out.println("Different");
                         bank.removeAmount(10);
+                        balanceLabel.setText(String.valueOf(bank.getBalance()));
+                        moneyPanel.revalidate();
+                        moneyPanel.repaint();
                         removeOrder(order);
                         counterPanel.removeClient(order.getOrderNumber());
                     }
@@ -113,7 +121,7 @@ public class Orders {
         orderPanel.add(Box.createVerticalStrut(5));
         orderButtons.put(order.getOrderNumber(), button);
 
-        panel.revalidate();
+                panel.revalidate();
         panel.repaint();
     }
 }
