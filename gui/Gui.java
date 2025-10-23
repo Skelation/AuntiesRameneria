@@ -26,7 +26,7 @@ public class Gui {
     private JPanel Counter;
     public Counter counterPanel;
 
-    public Gui(ArrayList<Order> orders, Stove stove, Bank bank) {
+    public Gui(ArrayList<Order> orders, Stove stove, Bank bank, Clock clock) {
         counterPanel = new Counter(orders);
         Counter = counterPanel.panel;
 
@@ -36,7 +36,7 @@ public class Gui {
         fridgePanel = new Fridge();
         Fridge = fridgePanel.panel;
 
-        ordersPanel = new Orders(orders, tabbedPane, kitchenPanel, counterPanel, fridgePanel, bank);
+        ordersPanel = new Orders(orders, tabbedPane, kitchenPanel, counterPanel, fridgePanel, bank, clock);
         Orders = ordersPanel.panel;
        
         frame = new JFrame();

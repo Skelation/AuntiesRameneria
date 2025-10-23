@@ -24,13 +24,15 @@ public class Orders {
     private ArrayList<Order> orders;
     private Map<Integer, JButton> orderButtons;
     private Bank bank;
-    private JLabel balanceLabel;
+    public JLabel balanceLabel;
+    private Clock clock;
 
-    public Orders(ArrayList<Order> orders, JTabbedPane tabbedPane, Kitchen kitchenPanel, Counter counterPanel, Fridge fridgePanel, Bank bank) {
+    public Orders(ArrayList<Order> orders, JTabbedPane tabbedPane, Kitchen kitchenPanel, Counter counterPanel, Fridge fridgePanel, Bank bank, Clock clock) {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         orderPanel.setLayout(new BoxLayout(orderPanel, BoxLayout.Y_AXIS));
         orderPanel.setBackground(Color.GRAY);
         this.bank = bank;
+        this.clock = clock;
 
         orderPanel.add(Box.createVerticalStrut(5));
         for (int i = 0; i < orders.size(); i++) {
@@ -64,6 +66,15 @@ public class Orders {
         System.out.println("Order removed " + orderNumber);
     }
 
+    public void removeOrder(int orderNumber) {
+        for (int i = 0; i < orders.size(); i++) {
+            Order order = orders.get(i);
+            if (order.getOrderNumber() == orderNumber) {
+                removeOrder(orders.get(i));
+            }
+        }
+    }
+
     public void addOrder(Order order, Bank bank) {
         JPanel content = new JPanel();
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
@@ -91,6 +102,8 @@ public class Orders {
                     Burner[] burners = stove.getBurners();
                     Ramen selectedRamen = burners[kitchenPanel.getSelectedBurnerIndex()].getRamen();
                     if (selectedRamen.matches(order.getRamen())) {
+                        int orderNumber = order.getOrderNumber();
+                        clock.deleteEvent(orderNumber);
                         System.out.println("Same Order");
                         bank.addAmount(10);
                         balanceLabel.setText(String.valueOf(bank.getBalance()));

@@ -20,7 +20,7 @@ public class AuntiesRameneria {
         clock = new Clock();
         bank = new Bank();
 
-        gui = new Gui(orders, stove, bank);
+        gui = new Gui(orders, stove, bank, clock);
 
         startClock();
 
@@ -30,12 +30,25 @@ public class AuntiesRameneria {
         orderThread.start();
     }
 
+    
+
     private void startClock() {
         running = true;
         
         clock.setListener(time -> {
             if (clock.eventTimes.keySet().contains(time)) {
-                System.out.println("Event triggered: " + time); 
+                String event = clock.eventTimes.get(time);
+                String[] eventArray = event.split(" ");
+
+                if (eventArray[0].equals("TimeDoneOrder")) {
+                    bank.removeAmount(10);
+                    gui.ordersPanel.balanceLabel.setText(String.valueOf(bank.getBalance()));
+                    gui.ordersPanel.moneyPanel.revalidate();
+                    gui.ordersPanel.moneyPanel.repaint();
+
+                    gui.ordersPanel.removeOrder(Integer.valueOf(eventArray[1]));
+                    gui.counterPanel.removeClient(Integer.valueOf(eventArray[1]));
+                }
             }
         });
 
@@ -71,29 +84,15 @@ public class AuntiesRameneria {
         clock.eventTimes.put(time, event);
     }
 
-    // public void takeOrders(ArrayList<Order> orders, Clock clock) {
-    //     while (orders.size() < 3) {
-    //         Order newOrder = (new Order()).newOrder();
-    //         orderNumbers = orderNumbers + 1;
-    //         System.out.println("New Order " + orderNumbers);
-    //         newOrder.setOrderNumber(orderNumbers);
-    //         orders.add(newOrder);
-    //         clock.eventTimes.put(120L, String.format("TimeDoneOrder%d", orderNumbers));
-    //         gui.counterPanel.addClient();
-    //         gui.ordersPanel.addOrder(newOrder);
-    //     }
-    // }
-
     public void takeOrders(ArrayList<Order> orders, Clock clock) {
         while (true) {
             synchronized (orders) {
                 if (orders.size() < 3) {
                     Order newOrder = (new Order()).newOrder();
                     orderNumbers++;
-                    System.out.println("New Order " + orderNumbers);
                     newOrder.setOrderNumber(orderNumbers);
                     orders.add(newOrder);
-                    clock.eventTimes.put(120L, String.format("TimeDoneOrder%d", orderNumbers));
+                    clock.eventTimes.put(clock.getTime() + 20, String.format("TimeDoneOrder %d", orderNumbers));
 
                     SwingUtilities.invokeLater(() -> {
                         gui.counterPanel.addClient(orderNumbers);
@@ -103,7 +102,7 @@ public class AuntiesRameneria {
             }
 
             try {
-                Thread.sleep(2000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 break;

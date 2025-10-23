@@ -330,7 +330,6 @@ public class Kitchen implements KeyListener {
             case KeyEvent.VK_ENTER:
                 Ramen selectedRamen = stove.getBurners()[selectedBurnerIndex].getRamen();
                 selectedRamen.cook();
-                System.out.println("Cooking ramen n." +selectedRamen);
                 updateBurnerImages();
             break;
         }
