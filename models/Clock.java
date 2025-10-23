@@ -45,4 +45,13 @@ public class Clock implements Runnable {
             } 
         }
     }
+
+    public long getTimeEnd(int orderNumber) {
+        for (Map.Entry<Long, String> entry : eventTimes.entrySet()) {
+            if (entry.getValue().contains("TimeDoneOrder " + String.valueOf(orderNumber))) {
+                return entry.getKey();
+            } 
+        }
+        return 0;
+    }
 }

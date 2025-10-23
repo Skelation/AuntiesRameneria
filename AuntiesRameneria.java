@@ -59,6 +59,7 @@ public class AuntiesRameneria {
             while (running) {
                 try {
                     Thread.sleep(1010);
+                    gui.ordersPanel.updateButtonTimers();
                 } catch (InterruptedException err) {
                     Thread.currentThread().interrupt();
                     break;

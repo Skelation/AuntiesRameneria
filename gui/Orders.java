@@ -22,7 +22,8 @@ public class Orders {
     private Counter counterPanel;
     private Fridge fridgePanel;
     private ArrayList<Order> orders;
-    private Map<Integer, JButton> orderButtons;
+    private Map<Integer, JLabel> orderTimeLabels;
+    public Map<Integer, JButton> orderButtons;
     private Bank bank;
     public JLabel balanceLabel;
     private Clock clock;
@@ -33,6 +34,7 @@ public class Orders {
         orderPanel.setBackground(Color.GRAY);
         this.bank = bank;
         this.clock = clock;
+        this.orderTimeLabels = new HashMap<>();
 
         orderPanel.add(Box.createVerticalStrut(5));
         for (int i = 0; i < orders.size(); i++) {
@@ -77,7 +79,12 @@ public class Orders {
 
     public void addOrder(Order order, Bank bank) {
         JPanel content = new JPanel();
+        long timeEndOrder = clock.getTimeEnd(order.getOrderNumber());
+        long timeLeft = timeEndOrder - clock.getTime();
+        JLabel timeleftLabel = new JLabel(String.valueOf(timeLeft));
+
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+        content.add(timeleftLabel); 
         content.add(new JLabel(order.getRamen().getSeasoning()));
         for (String topping : order.getRamen().getToppings()) {
             content.add(new JLabel("+ " + topping));
@@ -133,9 +140,24 @@ public class Orders {
         orderPanel.add(button);
         orderPanel.add(Box.createVerticalStrut(5));
         orderButtons.put(order.getOrderNumber(), button);
+        orderTimeLabels.put(order.getOrderNumber(), timeleftLabel);
 
-                panel.revalidate();
+        panel.revalidate();
         panel.repaint();
     }
+
+    public void updateButtonTimers() {
+        SwingUtilities.invokeLater(() -> {
+            for (Map.Entry<Integer, JLabel> entry : orderTimeLabels.entrySet()) {
+                int orderNumber = entry.getKey();
+                JLabel label = entry.getValue();
+                long timeLeft = clock.getTimeEnd(orderNumber) - clock.getTime();
+
+                if (timeLeft < 0) timeLeft = 0;
+                label.setText("Time left: " + timeLeft + "s");
+            }
+        });
+    }
+
 }
 
