@@ -6,6 +6,7 @@ public class Order {
     private Ramen ramen = new Ramen();
     private Drink drink = new Drink();
     private int orderNumber = 0;
+    private long timeLeft;
     
     public Order setRamen(Ramen ramen) {
         this.ramen = ramen;
@@ -23,6 +24,14 @@ public class Order {
 
     public Ramen getRamen() {
         return this.ramen;
+    }
+
+    public void setTimeLeft(long time) {
+        this.timeLeft = time;
+    }
+
+    public long getTimeLeft() {
+        return this.timeLeft;
     }
 
     public Drink getDrink() {
