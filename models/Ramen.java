@@ -42,10 +42,29 @@ public class Ramen {
         }
     }
 
-    public String getState() {
+    public String getState(String[] images) {
         String path = "Assets/";
+        String imagePath;
         if (this.hasWater && this.hasNoodle && this.isCooked) {
-            return path + "BowlRamen.png";
+            if (this.toppings.size() == 0) {
+                return path + "BowlRamen.png";
+            } else {
+                if (this.toppings.size() == 1) {
+                    imagePath = path + "Just" + this.toppings.get(0) + ".png";
+                    System.out.println(imagePath);
+                    return imagePath;
+                } else {
+                    imagePath = path + this.toppings.get(0) + "And" + this.toppings.get(1) + ".png";
+                    for (int i = 0; i < images.length; i++) {
+                        if (imagePath ==  images[i]) {
+                            return imagePath;
+                        }
+                    }
+                    imagePath = path + this.toppings.get(1) + "And" + this.toppings.get(0) + ".png";
+                    System.out.println(imagePath);
+                    return imagePath;
+                }
+            }
         } else if (this.hasWater && this.hasNoodle) {
             return path + "BowlRawRamen.png";
         } else if (this.hasWater) {
@@ -89,14 +108,16 @@ public class Ramen {
 
         String seasoning = seasonings[(new Random()).nextInt(seasonings.length)];
         ArrayList<String> allToppings = new ArrayList<String>(
-            Arrays.asList("Shiitake", "Pork loin", "Fried eggs", "KaraAge chicken",
-                "Katsu chicken", "Gyoza", "Spring onions")
+            Arrays.asList("Shiitake", "PorkLoin", "FriedEggs", "KaraAge",
+                "Katsu", "Gyoza", "SpringOnion")
         );
 
-        int numberOfToppings = (new Random()).nextInt(allToppings.size());
+        int numberOfToppings = (new Random()).nextInt(0, 3);
         
         for (int i = 0; i < numberOfToppings; i++) {
-            randomRamen.toppings.add(allToppings.get((new Random()).nextInt(allToppings.size())));
+            int randomIndex = new Random().nextInt(allToppings.size());
+            randomRamen.toppings.add(allToppings.get(randomIndex));
+            allToppings.remove(randomIndex);
         }
 
         randomRamen.addWater();

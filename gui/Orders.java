@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class Orders {
     public JPanel panel = new JPanel();
@@ -89,7 +90,6 @@ public class Orders {
         for (String topping : order.getRamen().getToppings()) {
             content.add(new JLabel("+ " + topping));
         }
-
         JButton button = new JButton();
         button.setLayout(new BorderLayout());
         button.add(content, BorderLayout.CENTER);

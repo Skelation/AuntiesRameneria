@@ -3,6 +3,7 @@ package gui;
 import models.*;
 
 import java.awt.*;
+import java.awt.RenderingHints.Key;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
@@ -22,8 +23,24 @@ public class Kitchen implements KeyListener {
 
     String[] seasonings = {"Water", "Noodles", "Carbonara", "Hot Chicken", "2x Spicy",
             "3x Spicy", "Cheese", "Habanero Lime"};
-    String[] toppings = {"Shiitake", "Pork loin", "Fried eggs", "KaraAge chicken",
-                "Katsu chicken", "Gyoza", "Spring onions"};
+    String[] toppings = {"Shiitake", "PorkLoin", "FriedEggs", "KaraAge",
+                "Katsu", "Gyoza", "SpringOnion"};
+
+    private String[] seasoningImages = {"2xSpicy.png", "Chicken.png", "Carbonara.png", "3xSpicy.png", 
+        "Cheese.png", "HabaneroLime.png", "Water.png", "Noodles.png"};
+
+    private String[] toppingImages = {"ShiitakeMFULL.png", "PorkLoin.png", "Egg.png", "KaraAge.png", 
+        "Katsu.png", "Gyoza.png", "SpringOnion.png"};
+
+    private String[] burnerLowImages = {"BowlRamen.png", "BowlRawRamen.png", "BowlWater.png", "EmptyBowl.png"};
+
+    public String[] burnerHighImages = {"BowlRamen.png", "BowlRawRamen.png", "BowlWater.png", "EmptyBowl.png",
+        "JustShiitake.png", "JustPorkLoin.png", "JustEgg.png", "JustGyoza.png", "JustSpringOnion.png", "EggAndGyoza.png",
+        "EggAndPorkLoin.png", "EggAndShiitake.png", "EggAndSpringOnion.png", "PorkLoinAndGyoza.png", "ShiitakeAndGyoza.png", "ShiitakeAndPorkLoin.png",
+        "SpringOnionAndGyoza.png", "SpringOnionAndPorkLoin.png", "SpringOnionAndShiitake.png"
+    };
+
+
 
     private int selectedBurnerIndex = 0;
     private JToggleButton[] seasoningButtons;
@@ -35,21 +52,16 @@ public class Kitchen implements KeyListener {
     private static String ASSETS_PATH = "Assets/";
 
     private void preloadImages() {
-        String[] seasoningImages = {"2xSpicy.png", "Chicken.png", "Carbonara.png", "3xSpicy.png", 
-                                  "Cheese.png", "HabaneroLime.png", "Water.png", "Noodles.png"};
-        
-        String[] toppingImages = {"ShiitakeMFULL.png", "PorkLoin.png", "Egg.png", "KaraAge.png", 
-                                "Katsu.png", "Gyoza.png", "SpringOnion.png"};
-        
-        String[] burnerImages = {"BowlRamen.png", "BowlRawRamen.png", "BowlWater.png", "EmptyBowl.png"};
-        
-        for (String imageName : seasoningImages) {
+                for (String imageName : seasoningImages) {
             loadAndCacheImage(imageName);
         }
         for (String imageName : toppingImages) {
             loadAndCacheImage(imageName);
         }
-        for (String imageName : burnerImages) {
+        // for (String imageName : burnerLowImages) {
+        //     loadAndCacheImage(imageName);
+        // }
+        for (String imageName : burnerHighImages) {
             loadAndCacheImage(imageName);
         }
     }
@@ -202,22 +214,22 @@ public class Kitchen implements KeyListener {
                         ramen.addTopping("Shiitake");
                         break;
                     case (1):
-                        ramen.addTopping("Pork loin");
+                        ramen.addTopping("PorkLoin");
                         break;
                     case (2):
-                        ramen.addTopping("Fried eggs");
+                        ramen.addTopping("FriedEggs");
                         break;
                     case (3):
-                        ramen.addTopping("KaraAge chicken");
+                        ramen.addTopping("KaraAge");
                         break;
                     case (4):
-                        ramen.addTopping("Katsu chicken");
+                        ramen.addTopping("Katsu");
                         break;
                     case (5):
                         ramen.addTopping("Gyoza");
                         break;
                     case (6):
-                        ramen.addTopping("Spring onions");
+                        ramen.addTopping("SpringOnion");
                         break;
                     default:
                         System.out.println("Not handled yet");
@@ -247,7 +259,7 @@ public class Kitchen implements KeyListener {
     public void updateBurnerImages() {
         for (int i = 0 ; i < burnerButtons.length; i++) {
             Ramen ramen = stove.getBurners()[i].getRamen();
-            String state = ramen.getState();
+            String state = ramen.getState(burnerHighImages);
             String imageName = state.replace(ASSETS_PATH, "");
             ImageIcon icon = getCachedImage(imageName, 300);
             burnerButtons[i].setIcon(icon);
@@ -295,20 +307,20 @@ public class Kitchen implements KeyListener {
         switch (s) {
             case ("Shiitake"):
                 return "Assets/ShiitakeMFULL.png";
-            case ("Pork loin"):
-                return "Assets/PorkLoin.png";
-            case ("Fried eggs"):
-                return "Assets/Egg.png";
-            case ("KaraAge chicken"):
+            case ("PorkLoin"):
+                return "Assets/PorkLoinH.png";
+            case ("FriedEggs"):
+                return "Assets/EggH.png";
+            case ("KaraAge"):
                 return "Assets/KaraAge.png";
-            case ("Katsu chicken"):
+            case ("Katsu"):
                 return "Assets/Katsu.png";
             case ("Gyoza"):
-                return "Assets/Gyoza.png";
-            case ("Spring onions"):
-                return "Assets/SpringOnion.png";
+                return "Assets/GyozaH.png";
+            case ("SpringOnion"):
+                return "Assets/SpringOnionH.png";
             default:
-                return "Assets/SpringOnion.png";
+                return "Assets/SpringOnionH.png";
         }
     }
 
@@ -330,6 +342,11 @@ public class Kitchen implements KeyListener {
             case KeyEvent.VK_ENTER:
                 Ramen selectedRamen = stove.getBurners()[selectedBurnerIndex].getRamen();
                 selectedRamen.cook();
+                updateBurnerImages();
+            break;
+            case KeyEvent.VK_DELETE:
+                Burner selectedBurner = stove.getBurners()[selectedBurnerIndex];
+                selectedBurner.reset();
                 updateBurnerImages();
             break;
         }

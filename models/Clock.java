@@ -2,13 +2,14 @@ package models;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.LongConsumer;
 
 public class Clock implements Runnable {
     private volatile boolean running = true;
     private long time = 0;
     private LongConsumer tickListener;
-    public HashMap<Long, String> eventTimes = new HashMap<>();
+    public ConcurrentHashMap<Long, String> eventTimes = new ConcurrentHashMap<>();
 
     public void setListener(LongConsumer listener) {
         this.tickListener = listener;
