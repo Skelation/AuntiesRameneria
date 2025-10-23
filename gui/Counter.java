@@ -111,11 +111,11 @@ public class Counter implements KeyListener {
             break;
         }
         Image image = icon.getImage();
-        image = image.getScaledInstance(500, 500, Image.SCALE_DEFAULT);
+        image = image.getScaledInstance(400, 400, Image.SCALE_DEFAULT);
         icon = new ImageIcon(image);
 
         JButton button = new JButton(icon);
-        button.setPreferredSize(new Dimension(500, 500));
+        button.setPreferredSize(new Dimension(400, 400));
         panel.add(button);
         button.setBorder(BorderFactory.createEmptyBorder());
         button.setContentAreaFilled(false);
