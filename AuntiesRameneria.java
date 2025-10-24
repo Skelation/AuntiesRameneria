@@ -62,7 +62,7 @@ public class AuntiesRameneria {
         Thread timeThread = new Thread(() -> {
             while (running) {
                 try {
-                    Thread.sleep(1010);
+                    Thread.sleep(300);
                     gui.ordersPanel.updateButtonTimers();
                     gui.kitchenPanel.updateKitchenTimers();
                 } catch (InterruptedException err) {

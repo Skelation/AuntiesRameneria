@@ -14,6 +14,14 @@ public class Ramen {
     private String seasoning = "";
     private ArrayList<String> toppings = new ArrayList<>();
 
+    public boolean isReadyToCook() {
+        if (this.hasWater && this.hasNoodle) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public boolean cook() {
         if (this.isCooked) {
             this.isBurnt = true;
@@ -56,12 +64,11 @@ public class Ramen {
                 } else {
                     imagePath = path + this.toppings.get(0) + "And" + this.toppings.get(1) + ".png";
                     for (int i = 0; i < images.length; i++) {
-                        if (imagePath ==  images[i]) {
+                        if (imagePath.equals(path + images[i])) {
                             return imagePath;
                         }
                     }
                     imagePath = path + this.toppings.get(1) + "And" + this.toppings.get(0) + ".png";
-                    System.out.println(imagePath);
                     return imagePath;
                 }
             }
