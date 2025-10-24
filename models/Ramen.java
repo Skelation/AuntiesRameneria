@@ -8,7 +8,6 @@ public class Ramen {
     private boolean isCooked;
     private boolean hasNoodle;
     private boolean hasWater;
-    // private boolean hasSeasoningOil;
     private int timeCooked;
     private boolean isBurnt;
     private String seasoning = "";
@@ -24,7 +23,8 @@ public class Ramen {
 
     public boolean cook() {
         if (this.isCooked) {
-            this.isBurnt = true;
+            // Remove except if we want to implement it
+            // this.isBurnt = true;
             return false;
         } else {
             this.isCooked = true;
@@ -87,15 +87,6 @@ public class Ramen {
         }
         return this;
     }
-
-    // public boolean addSeasoningOil() {
-    //     if (this.hasSeasoningOil) {
-    //         return false;
-    //     } else {
-    //         this.hasSeasoningOil = true;
-    //         return true;
-    //     }
-    // }
 
     public String getSeasoning() {
         return this.seasoning;
