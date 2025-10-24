@@ -24,7 +24,7 @@ public class Orders {
     private Fridge fridgePanel;
     private ArrayList<Order> orders;
     private Map<Integer, JLabel> orderTimeLabels;
-    public Map<Integer, JButton> orderButtons;
+    public Map<Integer, OrderButton> orderButtons;
     private Bank bank;
     public JLabel balanceLabel;
     private Clock clock;
@@ -59,7 +59,7 @@ public class Orders {
         int orderNumber = order.getOrderNumber();
         orders.remove(order);
 
-        JButton button = orderButtons.remove(orderNumber);
+        OrderButton button = orderButtons.remove(orderNumber);
         SwingUtilities.invokeLater(() -> {
             orderPanel.remove(button);
             orderPanel.revalidate();
@@ -90,8 +90,11 @@ public class Orders {
         for (String topping : order.getRamen().getToppings()) {
             content.add(new JLabel("+ " + topping));
         }
+        if (order.getDrink() != null) {
+            content.add(new JLabel("+ " + order.getDrink().getName()));
+        }
 
-        JButton button = new JButton();
+        OrderButton button = new OrderButton();
         button.setLayout(new BorderLayout());
         button.add(content, BorderLayout.CENTER);
 
@@ -101,39 +104,56 @@ public class Orders {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int tabIndex = jTabbedPane.getSelectedIndex();
+                int orderNumber = order.getOrderNumber();
                 switch (tabIndex) {
                     case 0:
                     System.out.println("Interacting with counter");
                     break;
                     case 1:
-                    Stove stove = kitchenPanel.getStove();
-                    Burner[] burners = stove.getBurners();
-                    Ramen selectedRamen = burners[kitchenPanel.getSelectedBurnerIndex()].getRamen();
-                    if (selectedRamen.matches(order.getRamen())) {
-                        int orderNumber = order.getOrderNumber();
-                        clock.deleteEvent(orderNumber);
-                        System.out.println("Same Order");
-                        bank.addAmount(10);
-                        balanceLabel.setText(String.valueOf(bank.getBalance()));
-                        moneyPanel.revalidate();
-                        moneyPanel.repaint();
-                        removeOrder(order);
-                        counterPanel.removeClient(order.getOrderNumber());
-                    } else {
-                        System.out.printf("Order Ramen:\n%s \n\nSelectedRamen: \n%s", order.getRamen().getDescription(), selectedRamen.getDescription());
-                        System.out.println("Different");
-                        bank.removeAmount(10);
-                        balanceLabel.setText(String.valueOf(bank.getBalance()));
-                        moneyPanel.revalidate();
-                        moneyPanel.repaint();
-                        removeOrder(order);
-                        counterPanel.removeClient(order.getOrderNumber());
-                    }
-                    burners[kitchenPanel.getSelectedBurnerIndex()].reset();
-                    kitchenPanel.updateBurnerImages();
-                    kitchenPanel.focusPanel();
-                    default:
-                    break;
+                        Stove stove = kitchenPanel.getStove();
+                        Burner[] burners = stove.getBurners();
+                        Ramen selectedRamen = burners[kitchenPanel.getSelectedBurnerIndex()].getRamen();
+                        if (selectedRamen.matches(order.getRamen())) {
+                            System.out.println("Same Order");
+                            button.setUserRamen(selectedRamen);
+                            if (button.isComplete()) {
+                                rightSubmit(clock, bank, balanceLabel, orderNumber, order);
+                            }
+                            // clock.deleteEvent(orderNumber);
+                            // bank.addAmount(10);
+                            // balanceLabel.setText(String.valueOf(bank.getBalance()));
+                            // moneyPanel.revalidate();
+                            // moneyPanel.repaint();
+                            // removeOrder(order);
+                            // counterPanel.removeClient(order.getOrderNumber());
+                        } else {
+                            System.out.printf("Order Ramen:\n%s \n\nSelectedRamen: \n%s", order.getRamen().getDescription(), selectedRamen.getDescription());
+                            System.out.println("Different");
+                            wrongSubmit(clock, bank, balanceLabel, orderNumber, order);
+                            // bank.removeAmount(10);
+                            // balanceLabel.setText(String.valueOf(bank.getBalance()));
+                            // moneyPanel.revalidate();
+                            // moneyPanel.repaint();
+                            // removeOrder(order);
+                            // counterPanel.removeClient(order.getOrderNumber());
+                        }
+                        burners[kitchenPanel.getSelectedBurnerIndex()].reset();
+                        kitchenPanel.updateBurnerImages();
+                        kitchenPanel.focusPanel();
+                        break;
+                    case 2:
+                        Drink selectedDrink = fridgePanel.getSelectedDrink();
+                        button.setUserDrink(selectedDrink);
+                        if (selectedDrink.getName().equals(order.getDrink().getName())) {
+                            System.out.println("Same Drink");
+                            button.setUserDrink(selectedDrink);
+                            if (button.isComplete()) {
+                                rightSubmit(clock, bank, balanceLabel, orderNumber, order);
+                            }
+                            } else {
+                            wrongSubmit(clock, bank, balanceLabel, orderNumber, order);
+                        }
+                        break;
                 }
             }
         });
@@ -145,6 +165,26 @@ public class Orders {
 
         panel.revalidate();
         panel.repaint();
+    }
+
+    public void wrongSubmit(Clock clock, Bank bank, JLabel balanceLabel, int orderNumber, Order order) {
+        clock.deleteEvent(orderNumber);
+        bank.removeAmount(10);
+        balanceLabel.setText(String.valueOf(bank.getBalance()));
+        moneyPanel.revalidate();
+        moneyPanel.repaint();
+        removeOrder(order);
+        counterPanel.removeClient(order.getOrderNumber());
+    }
+
+    public void rightSubmit(Clock clock, Bank bank, JLabel balanceLabel, int orderNumber, Order order) {
+        clock.deleteEvent(orderNumber);
+        bank.addAmount(10);
+        balanceLabel.setText(String.valueOf(bank.getBalance()));
+        moneyPanel.revalidate();
+        moneyPanel.repaint();
+        removeOrder(order);
+        counterPanel.removeClient(order.getOrderNumber());
     }
 
     public void updateButtonTimers() {

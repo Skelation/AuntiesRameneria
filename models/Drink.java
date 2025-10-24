@@ -10,6 +10,11 @@ public class Drink {
         return this.name;
     }
 
+    public Drink setName(String name) {
+        this.name = name;
+        return this;
+    }
+
     public String getSize() {
         return this.size;
     }

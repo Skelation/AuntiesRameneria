@@ -49,8 +49,10 @@ public class AuntiesRameneria {
                     gui.ordersPanel.removeOrder(Integer.valueOf(eventArray[1]));
                     gui.counterPanel.removeClient(Integer.valueOf(eventArray[1]));
                 } else if (eventArray[0].equals("TimeDoneCooking")) {
-                    Ramen selectedRamen = gui.kitchenPanel.getStove().getBurners()[Integer.valueOf(eventArray[1])].getRamen();
+                    int burnerIndex = Integer.valueOf(eventArray[1]);
+                    Ramen selectedRamen = gui.kitchenPanel.getStove().getBurners()[burnerIndex].getRamen();
                     selectedRamen.cook();
+                    clock.deleteCookingEvent(burnerIndex);
                     gui.kitchenPanel.updateBurnerImages();
                 }
             }

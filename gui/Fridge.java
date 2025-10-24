@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import models.Drink;
+
 import javax.swing.*;
 
 public class Fridge implements KeyListener {
@@ -102,6 +104,10 @@ public class Fridge implements KeyListener {
 
     public int getSelectedDrinkIndex() {
         return selectedDrinkIndex;
+    }
+
+    public Drink getSelectedDrink() {
+        return new Drink().setName(drinks[selectedDrinkIndex]);
     }
 
     public void focusPanel() {

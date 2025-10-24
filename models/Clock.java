@@ -43,7 +43,18 @@ public class Clock implements Runnable {
                 eventTimes.remove(entry.getKey());
                 System.out.println("Value of entry selected " + entry.getValue());
                 System.out.println("All events " + eventTimes);
-            } 
+            }
+        }
+    }
+
+    public void deleteCookingEvent(int n) {
+        for (Map.Entry<Long, String> entry : eventTimes.entrySet()) {
+            if (entry.getValue().contains("TimeDoneCooking" + String.valueOf(n))) {
+                System.out.println("Deleting time done cooking number of burner " + n);
+                eventTimes.remove(entry.getKey());
+                System.out.println("Value of entry selected " + entry.getValue());
+                System.out.println("All events " + eventTimes);
+            }
         }
     }
 
