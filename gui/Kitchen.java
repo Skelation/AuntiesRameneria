@@ -137,7 +137,11 @@ public class Kitchen implements KeyListener {
             button.setBorder(BorderFactory.createEmptyBorder());
             button.setContentAreaFilled(false);
             long timeLeft = clock.getTimeCookEnd(i) - clock.getTime();
-            JLabel timeLeftLabel = new JLabel(String.valueOf(timeLeft));
+            JLabel timeLeftLabel = new JLabel(String.valueOf(timeLeft), SwingConstants.CENTER);
+            timeLeftLabel.setForeground(Color.WHITE);
+            timeLeftLabel.setFont(new Font("Arial", Font.PLAIN, 24));
+            timeLeftLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            timeLeftLabel.setVerticalAlignment(SwingConstants.CENTER);
             burnerButtons[i] = button;
 
             orderTimeLabels.put(i, timeLeftLabel);
