@@ -55,4 +55,13 @@ public class Clock implements Runnable {
         }
         return 0;
     }
+
+    public long getTimeCookEnd(int burnerIndex) {
+        for (Map.Entry<Long, String> entry : eventTimes.entrySet()) {
+            if (entry.getValue().contains("TimeDoneCooking " + String.valueOf(burnerIndex))) {
+                return entry.getKey();
+            } 
+        }
+        return 0;
+    }
 }

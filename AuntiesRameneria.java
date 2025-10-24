@@ -48,6 +48,10 @@ public class AuntiesRameneria {
 
                     gui.ordersPanel.removeOrder(Integer.valueOf(eventArray[1]));
                     gui.counterPanel.removeClient(Integer.valueOf(eventArray[1]));
+                } else if (eventArray[0].equals("TimeDoneCooking")) {
+                    Ramen selectedRamen = gui.kitchenPanel.getStove().getBurners()[Integer.valueOf(eventArray[1])].getRamen();
+                    selectedRamen.cook();
+                    gui.kitchenPanel.updateBurnerImages();
                 }
             }
         });
@@ -60,6 +64,7 @@ public class AuntiesRameneria {
                 try {
                     Thread.sleep(1010);
                     gui.ordersPanel.updateButtonTimers();
+                    gui.kitchenPanel.updateKitchenTimers();
                 } catch (InterruptedException err) {
                     Thread.currentThread().interrupt();
                     break;

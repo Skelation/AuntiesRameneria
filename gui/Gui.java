@@ -18,7 +18,7 @@ public class Gui {
     public JTabbedPane tabbedPane = new JTabbedPane();
 
     private JPanel Kitchen;
-    private Kitchen kitchenPanel;
+    public Kitchen kitchenPanel;
     private JPanel Fridge;
     private Fridge fridgePanel;
     private JPanel Orders;
@@ -30,7 +30,7 @@ public class Gui {
         counterPanel = new Counter(orders);
         Counter = counterPanel.panel;
 
-        kitchenPanel = new Kitchen(stove);
+        kitchenPanel = new Kitchen(stove, clock);
         Kitchen = kitchenPanel.panel;
 
         fridgePanel = new Fridge();

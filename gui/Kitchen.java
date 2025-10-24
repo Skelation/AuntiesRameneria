@@ -13,9 +13,11 @@ import javax.swing.*;
 
 public class Kitchen implements KeyListener {
     private Stove stove;
+    private Clock clock;
     private JToggleButton[] burnerButtons;
     public JPanel panel = new JPanel(new GridBagLayout());
     private GridBagConstraints gbc = new GridBagConstraints();
+    private Map<Integer, JLabel> orderTimeLabels = new HashMap<>();
 
     private JPanel stovePanel = new JPanel(new GridBagLayout());
     private JPanel burnersPanel = new JPanel();
@@ -94,8 +96,9 @@ public class Kitchen implements KeyListener {
     }
 
 
-    public Kitchen(Stove stove) {
+    public Kitchen(Stove stove, Clock clock) {
         this.stove = stove;
+        this.clock = clock;
         this.burnerButtons = new JToggleButton[stove.getBurners().length];
         this.seasoningButtons = new JToggleButton[seasonings.length];
         this.toppingButtons = new JToggleButton[toppings.length];
@@ -133,8 +136,16 @@ public class Kitchen implements KeyListener {
             button.setPreferredSize(new Dimension(300, 300));
             button.setBorder(BorderFactory.createEmptyBorder());
             button.setContentAreaFilled(false);
+            long timeLeft = clock.getTimeCookEnd(i) - clock.getTime();
+            JLabel timeleftLabel = new JLabel(String.valueOf(timeLeft));
             burnerButtons[i] = button;
-            stovePanel.add(button);
+
+            orderTimeLabels.put(i, timeleftLabel);
+            JPanel burnerPanel = new JPanel();
+            burnersPanel.setLayout(new BoxLayout(burnersPanel, BoxLayout.Y_AXIS));
+            burnerPanel.add(button);
+            burnerPanel.add(timeleftLabel);
+            stovePanel.add(burnerPanel);
         }
         updateBurnerImages();
         updateBurnerSelection();
@@ -266,6 +277,20 @@ public class Kitchen implements KeyListener {
         }
     }
 
+
+    public void updateKitchenTimers() {
+        SwingUtilities.invokeLater(() -> {
+            for (Map.Entry<Integer, JLabel> entry : orderTimeLabels.entrySet()) {
+                int burnerNumber = entry.getKey();
+                JLabel label = entry.getValue();
+                long timeLeft = clock.getTimeCookEnd(burnerNumber) - clock.getTime();
+
+                if (timeLeft < 0) timeLeft = 0;
+                label.setText(timeLeft + "s");
+            }
+        });
+    }
+
     private JToggleButton createIngredientButton(String pathToImage) {
         ImageIcon icon = new ImageIcon();
         icon = new ImageIcon(pathToImage);
@@ -340,10 +365,15 @@ public class Kitchen implements KeyListener {
                 }
             break;
             case KeyEvent.VK_ENTER:
-                Ramen selectedRamen = stove.getBurners()[selectedBurnerIndex].getRamen();
-                selectedRamen.cook();
-                updateBurnerImages();
-            break;
+                // Timer cookTimer = new Timer(5000, f -> {
+                //     Ramen selectedRamen = stove.getBurners()[selectedBurnerIndex].getRamen();
+                //     selectedRamen.cook();
+                //     updateBurnerImages();
+                // });
+                // cookTimer.setRepeats(false);
+                // cookTimer.start();
+                clock.eventTimes.put(clock.getTime() + 5, String.format("TimeDoneCooking %d", selectedBurnerIndex));
+                break;
             case KeyEvent.VK_DELETE:
                 Burner selectedBurner = stove.getBurners()[selectedBurnerIndex];
                 selectedBurner.reset();
