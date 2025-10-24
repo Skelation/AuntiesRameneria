@@ -95,17 +95,17 @@ public class Counter implements KeyListener {
         System.out.println("Adding client number " + orderNumber);
         ImageIcon icon = new ImageIcon();
         Random r = new Random();
-        int n = r.nextInt(0, 2);
+        int n = r.nextInt(0, 1);
         switch (n) {
             case 0:
-            icon = new ImageIcon("Assets/FatMan.png");
+            icon = new ImageIcon("Assets/C1Happy.png");
             break;
             case 1:
-            icon = new ImageIcon("Assets/Littlewoman.png");
+            icon = new ImageIcon("Assets/C2Happy.png");
             break;
-            case 2:
-            icon = new ImageIcon("Assets/SlimMan.png");
-            break;
+            // case 2:
+            // icon = new ImageIcon("Assets/SlimMan.png");
+            // break;
             default:
             icon = new ImageIcon("Assets/FatMan.png");
             break;

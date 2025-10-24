@@ -2,13 +2,14 @@ package models;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.LongConsumer;
 
 public class Clock implements Runnable {
     private volatile boolean running = true;
     private long time = 0;
     private LongConsumer tickListener;
-    public HashMap<Long, String> eventTimes = new HashMap<>();
+    public ConcurrentHashMap<Long, String> eventTimes = new ConcurrentHashMap<>();
 
     public void setListener(LongConsumer listener) {
         this.tickListener = listener;
@@ -49,6 +50,15 @@ public class Clock implements Runnable {
     public long getTimeEnd(int orderNumber) {
         for (Map.Entry<Long, String> entry : eventTimes.entrySet()) {
             if (entry.getValue().contains("TimeDoneOrder " + String.valueOf(orderNumber))) {
+                return entry.getKey();
+            } 
+        }
+        return 0;
+    }
+
+    public long getTimeCookEnd(int burnerIndex) {
+        for (Map.Entry<Long, String> entry : eventTimes.entrySet()) {
+            if (entry.getValue().contains("TimeDoneCooking " + String.valueOf(burnerIndex))) {
                 return entry.getKey();
             } 
         }
