@@ -39,7 +39,9 @@ public class Kitchen implements KeyListener {
     public String[] burnerHighImages = {"BowlRamen.png", "BowlRawRamen.png", "BowlWater.png", "EmptyBowl.png",
         "JustShiitake.png", "JustPorkLoin.png", "JustFriedEggs.png", "JustGyoza.png", "JustSpringOnion.png", "EggAndGyoza.png",
         "FriedEggsAndPorkLoin.png", "FriedEggsAndShiitake.png", "FriedEggsAndSpringOnion.png", "PorkLoinAndGyoza.png", "ShiitakeAndGyoza.png", "ShiitakeAndPorkLoin.png", 
-        "SpringOnionAndGyoza.png", "SpringOnionAndPorkLoin.png", "SpringOnionAndShiitake.png"
+        "SpringOnionAndGyoza.png", "SpringOnionAndPorkLoin.png", "SpringOnionAndShiitake.png", "KaraAgeAndPorkLoin.png", "KaraAgeAndFriedEggs.png", "KaraAgeAndGyoza.png",
+        "KaraAgeAndShiitake.png", "KaraAgeAndSpringOnion.png", "KatsuAndFriedEggs.png", "KatsuAndGyoza.png", "KatsuAndKaraAge.png", "KatsuAndPorkLoin.png", "KatsuAndShiitake.png",
+        "KatsuAndSpringOnion.png", "JustKaraAge.png", "JustKatsu.png"
     };
 
 
