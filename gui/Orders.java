@@ -25,6 +25,7 @@ public class Orders {
     private ArrayList<Order> orders;
     private Map<Integer, JLabel> orderTimeLabels;
     public Map<Integer, OrderButton> orderButtons;
+    private Map<Order, ArrayList<JLabel>> orderLabelMap = new HashMap<>();
     private Bank bank;
     public JLabel balanceLabel;
     private Clock clock;
@@ -82,17 +83,29 @@ public class Orders {
         JPanel content = new JPanel();
         long timeEndOrder = clock.getTimeEnd(order.getOrderNumber());
         long timeLeft = timeEndOrder - clock.getTime();
-        JLabel timeleftLabel = new JLabel(String.valueOf(timeLeft));
+
+        ArrayList<JLabel> labels = new ArrayList<>();
 
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+
+        JLabel timeleftLabel = new JLabel(String.valueOf(timeLeft));
         content.add(timeleftLabel); 
-        content.add(new JLabel(order.getRamen().getSeasoning()));
+        labels.add(timeleftLabel);
+        JLabel seasoningLabel = new JLabel(order.getRamen().getSeasoning());
+        content.add(seasoningLabel);
+        labels.add(seasoningLabel);
         for (String topping : order.getRamen().getToppings()) {
-            content.add(new JLabel("+ " + topping));
+            JLabel toppingLabel = new JLabel("+ " + topping);
+            content.add(toppingLabel);
+            labels.add(toppingLabel);
         }
         if (order.getDrink() != null) {
-            content.add(new JLabel("+ " + order.getDrink().getName()));
+            JLabel drinkLabel = new JLabel("+ " + order.getDrink().getName());
+            content.add(drinkLabel);
+            labels.add(drinkLabel);
         }
+
+        orderLabelMap.put(order, labels);
 
         OrderButton button = new OrderButton();
         button.setLayout(new BorderLayout());
@@ -119,23 +132,11 @@ public class Orders {
                             if (button.isComplete()) {
                                 rightSubmit(clock, bank, balanceLabel, orderNumber, order);
                             }
-                            // clock.deleteEvent(orderNumber);
-                            // bank.addAmount(10);
-                            // balanceLabel.setText(String.valueOf(bank.getBalance()));
-                            // moneyPanel.revalidate();
-                            // moneyPanel.repaint();
-                            // removeOrder(order);
-                            // counterPanel.removeClient(order.getOrderNumber());
+                            updateOrderDisplay(order, button.hasRamen(), button.hasDrink());
                         } else {
                             System.out.printf("Order Ramen:\n%s \n\nSelectedRamen: \n%s", order.getRamen().getDescription(), selectedRamen.getDescription());
                             System.out.println("Different");
                             wrongSubmit(clock, bank, balanceLabel, orderNumber, order);
-                            // bank.removeAmount(10);
-                            // balanceLabel.setText(String.valueOf(bank.getBalance()));
-                            // moneyPanel.revalidate();
-                            // moneyPanel.repaint();
-                            // removeOrder(order);
-                            // counterPanel.removeClient(order.getOrderNumber());
                         }
                         burners[kitchenPanel.getSelectedBurnerIndex()].reset();
                         kitchenPanel.updateBurnerImages();
@@ -149,10 +150,13 @@ public class Orders {
                             button.setUserDrink(selectedDrink);
                             if (button.isComplete()) {
                                 rightSubmit(clock, bank, balanceLabel, orderNumber, order);
-                            }
                             } else {
+                                updateOrderDisplay(order, button.hasRamen(), button.hasDrink());
+                            }
+                        } else {
                             wrongSubmit(clock, bank, balanceLabel, orderNumber, order);
                         }
+                        fridgePanel.focusPanel();
                         break;
                 }
             }
@@ -163,6 +167,26 @@ public class Orders {
         orderButtons.put(order.getOrderNumber(), button);
         orderTimeLabels.put(order.getOrderNumber(), timeleftLabel);
 
+        panel.revalidate();
+        panel.repaint();
+    }
+
+    public void updateOrderDisplay(Order order, boolean ramenDone,  boolean drinkDone) {
+        ArrayList<JLabel> labels = orderLabelMap.get(order);
+
+        int index = 1;
+
+        for (int i = 0; i < order.getRamen().getToppings().size() + 1 && index < labels.size(); i++) {
+            JLabel label = labels.get(index++);
+            String text = label.getText().replaceFirst("^[✓+]\\s", "");
+            label.setText((ramenDone ? "✓ " : "+ ") + text);
+        }
+
+        if (order.getDrink() != null && index < labels.size()) {
+            JLabel label = labels.get(index + 0);
+            String text = label.getText().replaceFirst("^[✓+]\\s", "");
+            label.setText((drinkDone ? "✓ " : "+ ") + text);
+        }
         panel.revalidate();
         panel.repaint();
     }

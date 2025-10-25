@@ -17,6 +17,14 @@ class OrderButton extends JButton {
         }
     }
 
+    public boolean hasRamen() {
+        if (userRamen != null) {
+            return true;
+        } else {
+            return false; 
+        } 
+    }
+
     public void setUserRamen(Ramen ramen) {
         this.userRamen = ramen;
     }
@@ -27,6 +35,14 @@ class OrderButton extends JButton {
         } else {
             return null; 
         }
+    }
+
+    public boolean hasDrink() {
+        if (userDrink != null) {
+            return true;
+        } else {
+            return false; 
+        } 
     }
 
     public void setUserDrink(Drink drink) {

@@ -100,7 +100,7 @@ public class AuntiesRameneria {
                     orderNumbers++;
                     newOrder.setOrderNumber(orderNumbers);
                     orders.add(newOrder);
-                    clock.eventTimes.put(clock.getTime() + 20, String.format("TimeDoneOrder %d", orderNumbers));
+                    clock.eventTimes.put(clock.getTime() + 30, String.format("TimeDoneOrder %d", orderNumbers));
 
                     SwingUtilities.invokeLater(() -> {
                         gui.counterPanel.addClient(orderNumbers);
@@ -110,7 +110,7 @@ public class AuntiesRameneria {
             }
 
             try {
-                Thread.sleep(10000);
+                Thread.sleep(15000);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 break;
