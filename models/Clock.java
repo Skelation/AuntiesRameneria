@@ -39,21 +39,15 @@ public class Clock implements Runnable {
     public void deleteEvent(int orderNumber) {
         for (Map.Entry<Long, String> entry : eventTimes.entrySet()) {
             if (entry.getValue().contains("TimeDoneOrder " + String.valueOf(orderNumber))) {
-                System.out.println("Deleting order number " + orderNumber);
                 eventTimes.remove(entry.getKey());
-                System.out.println("Value of entry selected " + entry.getValue());
-                System.out.println("All events " + eventTimes);
             }
         }
     }
 
     public void deleteCookingEvent(int n) {
         for (Map.Entry<Long, String> entry : eventTimes.entrySet()) {
-            if (entry.getValue().contains("TimeDoneCooking" + String.valueOf(n))) {
-                System.out.println("Deleting time done cooking number of burner " + n);
+            if (entry.getValue().contains("TimeDoneCooking " + String.valueOf(n))) {
                 eventTimes.remove(entry.getKey());
-                System.out.println("Value of entry selected " + entry.getValue());
-                System.out.println("All events " + eventTimes);
             }
         }
     }
@@ -65,6 +59,15 @@ public class Clock implements Runnable {
             } 
         }
         return 0;
+    }
+
+    public boolean hasBurnerEvent(int burnerIndex) {
+        for (Map.Entry<Long, String> entry : eventTimes.entrySet()) {
+            if (entry.getValue().contains("TimeDoneCooking " + String.valueOf(burnerIndex))) {
+                return true;
+            } 
+        }
+        return false;
     }
 
     public long getTimeCookEnd(int burnerIndex) {

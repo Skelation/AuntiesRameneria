@@ -92,7 +92,6 @@ public class Counter implements KeyListener {
     }
 
     public void addClient(int orderNumber) {
-        System.out.println("Adding client number " + orderNumber);
         ImageIcon icon = new ImageIcon();
         Random r = new Random();
         int n = r.nextInt(0, 1);

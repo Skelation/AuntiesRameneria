@@ -59,7 +59,6 @@ public class Ramen {
             } else {
                 if (this.toppings.size() == 1) {
                     imagePath = path + "Just" + this.toppings.get(0) + ".png";
-                    System.out.println(imagePath);
                     return imagePath;
                 } else {
                     imagePath = path + this.toppings.get(0) + "And" + this.toppings.get(1) + ".png";

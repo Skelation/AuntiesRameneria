@@ -42,7 +42,7 @@ public class AuntiesRameneria {
 
                 if (eventArray[0].equals("TimeDoneOrder")) {
                     bank.removeAmount(10);
-                    gui.ordersPanel.balanceLabel.setText(String.valueOf(bank.getBalance()));
+                    gui.ordersPanel.balanceLabel.setText(String.format("$: %.2f", bank.getBalance()));
                     gui.ordersPanel.moneyPanel.revalidate();
                     gui.ordersPanel.moneyPanel.repaint();
 

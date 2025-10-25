@@ -49,7 +49,7 @@ public class Orders {
         this.orders = orders;
         this.orderButtons = new HashMap<>();
         balanceLabel = new JLabel();
-        balanceLabel.setText(String.valueOf(bank.getBalance()));
+        balanceLabel.setText(String.format("$: %.2f", bank.getBalance()));
         
         moneyPanel.add(balanceLabel);
         panel.add(orderPanel);
@@ -67,7 +67,6 @@ public class Orders {
             orderPanel.repaint();
         });
 
-        System.out.println("Order removed " + orderNumber);
     }
 
     public void removeOrder(int orderNumber) {
@@ -120,22 +119,18 @@ public class Orders {
                 int orderNumber = order.getOrderNumber();
                 switch (tabIndex) {
                     case 0:
-                    System.out.println("Interacting with counter");
                     break;
                     case 1:
                         Stove stove = kitchenPanel.getStove();
                         Burner[] burners = stove.getBurners();
                         Ramen selectedRamen = burners[kitchenPanel.getSelectedBurnerIndex()].getRamen();
                         if (selectedRamen.matches(order.getRamen())) {
-                            System.out.println("Same Order");
                             button.setUserRamen(selectedRamen);
                             if (button.isComplete()) {
                                 rightSubmit(clock, bank, balanceLabel, orderNumber, order);
                             }
                             updateOrderDisplay(order, button.hasRamen(), button.hasDrink());
                         } else {
-                            System.out.printf("Order Ramen:\n%s \n\nSelectedRamen: \n%s", order.getRamen().getDescription(), selectedRamen.getDescription());
-                            System.out.println("Different");
                             wrongSubmit(clock, bank, balanceLabel, orderNumber, order);
                         }
                         burners[kitchenPanel.getSelectedBurnerIndex()].reset();
@@ -146,7 +141,6 @@ public class Orders {
                         Drink selectedDrink = fridgePanel.getSelectedDrink();
                         button.setUserDrink(selectedDrink);
                         if (selectedDrink.getName().equals(order.getDrink().getName())) {
-                            System.out.println("Same Drink");
                             button.setUserDrink(selectedDrink);
                             if (button.isComplete()) {
                                 rightSubmit(clock, bank, balanceLabel, orderNumber, order);
@@ -194,7 +188,7 @@ public class Orders {
     public void wrongSubmit(Clock clock, Bank bank, JLabel balanceLabel, int orderNumber, Order order) {
         clock.deleteEvent(orderNumber);
         bank.removeAmount(10);
-        balanceLabel.setText(String.valueOf(bank.getBalance()));
+        balanceLabel.setText(String.format("$: %.2f", bank.getBalance()));
         moneyPanel.revalidate();
         moneyPanel.repaint();
         removeOrder(order);
@@ -202,9 +196,11 @@ public class Orders {
     }
 
     public void rightSubmit(Clock clock, Bank bank, JLabel balanceLabel, int orderNumber, Order order) {
+        long timeLeft = clock.getTimeEnd(orderNumber) - clock.getTime();
+        double pay = bank.calculatePay(order, timeLeft, clock.getTime());
         clock.deleteEvent(orderNumber);
-        bank.addAmount(10);
-        balanceLabel.setText(String.valueOf(bank.getBalance()));
+        bank.addAmount(pay);
+        balanceLabel.setText(String.format("$: %.2f", bank.getBalance()));
         moneyPanel.revalidate();
         moneyPanel.repaint();
         removeOrder(order);

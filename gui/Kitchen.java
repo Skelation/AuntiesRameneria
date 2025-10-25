@@ -377,7 +377,7 @@ public class Kitchen implements KeyListener {
                 }
             break;
             case KeyEvent.VK_ENTER:
-                if (stove.getBurners()[selectedBurnerIndex].getRamen().isReadyToCook()) {
+                if (stove.getBurners()[selectedBurnerIndex].getRamen().isReadyToCook() && !clock.hasBurnerEvent(selectedBurnerIndex)) {
                     clock.eventTimes.put(clock.getTime() + 5, String.format("TimeDoneCooking %d", selectedBurnerIndex));
                 }
                 break;
