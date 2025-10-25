@@ -77,6 +77,7 @@ public class Counter implements KeyListener {
 
     public void removeClient(int orderNumber) {
         JButton button = clientButtons.remove(orderNumber);
+        button.setFocusable(false);
         if (button != null) {
             clientList.remove(button);
             clientsPanel.remove(button);

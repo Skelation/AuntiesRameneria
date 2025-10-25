@@ -135,6 +135,7 @@ public class Kitchen implements KeyListener {
             image = image.getScaledInstance(300, 300, Image.SCALE_DEFAULT);
             icon = new ImageIcon(image);
             JToggleButton button = new JToggleButton(icon);
+            button.setFocusable(false);
             button.setPreferredSize(new Dimension(300, 300));
             button.setBorder(BorderFactory.createEmptyBorder());
             button.setContentAreaFilled(false);
