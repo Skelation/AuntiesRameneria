@@ -49,6 +49,8 @@ public class Orders {
         this.orders = orders;
         this.orderButtons = new HashMap<>();
         balanceLabel = new JLabel();
+        balanceLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        // balanceLabel.setForeground(Color.BLACK);
         balanceLabel.setText(String.format("$: %.2f", bank.getBalance()));
         
         moneyPanel.add(balanceLabel);
