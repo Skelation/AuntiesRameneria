@@ -39,6 +39,7 @@ public class Clock implements Runnable {
             try {
                 Thread.sleep(1000);
                 time++;
+                // System.out.println("Current time " + getTime());
                 if (tickListener != null) tickListener.accept(time);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();

@@ -29,13 +29,13 @@ Loading takes some time so its normal if it doesn't launch directly.
 - Use arrow keys to go through the burners.
 - When ramen contains noodles and water, press `<ENTER>` to cook it and see the timer as it is getting cooked.
 - Pressing `<DELETE>` or `<BACKSPACE>` should reset the ramen to its default state.
-- Try making a ramen accordingly to the order and submitting it by clicking on the order while hovering the correct ramen (Ramen should contain noodles, water, be cooked and contain the correct seasoning and toppings).
+- Try making a ramen according to the order and submitting it by clicking on the order while hovering over the correct ramen (Ramen should contain noodles, water, be cooked and contain the correct seasoning and toppings).
 
-- On the fridge panel, use arrow keys to through the different drinks.
-- Try clicking on an order with the selected drink to add it.
-- Try submitting a drink to an order by hovering the correct drink and clicking on the order.
+- On the fridge panel, use arrow keys to go through the different drinks.
+- Try clicking on an order with the correct selected drink to add it.
+- Try submitting a drink to an order by hovering over the correct drink and clicking on the order.
 
 - Try finishing an order by giving it the correct drink and the correct ramen. See how it gives positive feedback to the player by showing the money gained and the multipliers.
-- Try getting an order wrong by giving it an incorrect drink. See how it substracts money from the player's balance.
+- Try getting an order wrong by giving it an incorrect drink. See how it subtracts money from the player's balance.
 
 - On the counter panel, there should be as many clients at the counter as there are orders in the order panel.
