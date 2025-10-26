@@ -37,7 +37,7 @@ public class Info {
         l4.setFont(new Font("Montserrat", Font.PLAIN, 25));
         l4.setForeground(Color.white);
 
-        JLabel l5 = new JLabel("3. In the Kitchen scene, pick the Donabe using arrow keys.");
+        JLabel l5 = new JLabel("3. In the Kitchen scene, pick the bowl using arrow keys.");
         l5.setFont(new Font("Montserrat", Font.PLAIN, 25));
         l5.setForeground(Color.white);
 
@@ -70,6 +70,7 @@ public class Info {
         panel.add(l6, gbc);
         panel.add(l7, gbc);
         panel.add(l8, gbc);
+        panel.add(l9, gbc);
         panel.add(l10, gbc);
 
         focusPanel();
