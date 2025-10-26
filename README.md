@@ -15,3 +15,27 @@ As the game progresses, the difficulty gradually increases. The number of custom
 To understand and implement these elements of game design, we referred to the following sources:
 - Baur, Wolfgang (2012). Complete Kobold Guide to Game Design. Open Design LLC. ISBN 978-1936781065.
 - Burgun, Keith (2012). Game Design Theory: A New Philosophy for Understanding Games. A K Peters/CRC Press. ISBN 978-1466554207.
+
+# Usage
+
+To launch the game, navigate to the folder and enter `java AuntiesRameneria.java`.
+Loading takes some time so its normal if it doesn't launch directly.
+
+# Tests
+
+- Use `<ALT> + 1 or 2 or 3` to switch panes.
+
+- On the kitchen panel, click on ingredients buttons and see how they interact with the selected ramen.
+- Use arrow keys to go through the burners.
+- When ramen contains noodles and water, press `<ENTER>` to cook it and see the timer as it is getting cooked.
+- Pressing `<DELETE>` or `<BACKSPACE>` should reset the ramen to its default state.
+- Try making a ramen accordingly to the order and submitting it by clicking on the order while hovering the correct ramen (Ramen should contain noodles, water, be cooked and contain the correct seasoning and toppings).
+
+- On the fridge panel, use arrow keys to through the different drinks.
+- Try clicking on an order with the selected drink to add it.
+- Try submitting a drink to an order by hovering the correct drink and clicking on the order.
+
+- Try finishing an order by giving it the correct drink and the correct ramen. See how it gives positive feedback to the player by showing the money gained and the multipliers.
+- Try getting an order wrong by giving it an incorrect drink. See how it substracts money from the player's balance.
+
+- On the counter panel, there should be as many clients at the counter as there are orders in the order panel.

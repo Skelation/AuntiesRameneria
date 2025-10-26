@@ -45,9 +45,6 @@ public class Bank {
         }
 
         survivalMultiplier += time/100;
-        System.out.println(String.format("Time Left multiplier %.1f", timeMultiplier));
-        System.out.println(String.format("Difficult recipe multiplier %.1f", complexityMultiplier));
-        System.out.println(String.format("Survival multiplier %.1f", survivalMultiplier));
 
         double pay = 8.0 * timeMultiplier *  complexityMultiplier * survivalMultiplier;
         double[] payArray = new double[4];
