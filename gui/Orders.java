@@ -154,9 +154,9 @@ public class Orders {
                 int tabIndex = jTabbedPane.getSelectedIndex();
                 int orderNumber = order.getOrderNumber();
                 switch (tabIndex) {
-                    case 0:
-                    break;
                     case 1:
+                    break;
+                    case 2:
                         Stove stove = kitchenPanel.getStove();
                         Burner[] burners = stove.getBurners();
                         Ramen selectedRamen = burners[kitchenPanel.getSelectedBurnerIndex()].getRamen();
@@ -173,7 +173,7 @@ public class Orders {
                         kitchenPanel.updateBurnerImages();
                         kitchenPanel.focusPanel();
                         break;
-                    case 2:
+                    case 3:
                         Drink selectedDrink = fridgePanel.getSelectedDrink();
                         button.setUserDrink(selectedDrink);
                         if (selectedDrink.getName().equals(order.getDrink().getName())) {
