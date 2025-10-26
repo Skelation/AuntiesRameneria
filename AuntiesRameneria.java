@@ -13,6 +13,8 @@ public class AuntiesRameneria {
     private Gui gui;
     private Stove stove;
     private Bank bank;
+    private int timeToFinishOrder = 30;
+    private int incomingOrderTime = 15000;
 
     private void run() {
         stove = new Stove();
@@ -36,6 +38,12 @@ public class AuntiesRameneria {
         running = true;
         
         clock.setListener(time -> {
+            if (clock.difficultyTimes.keySet().contains(time)) {
+                timeToFinishOrder = clock.difficultyTimes.get(time);
+            }
+            if (clock.incomingOrderTimes.keySet().contains(time)) {
+                incomingOrderTime= clock.incomingOrderTimes.get(time);
+            }
             if (clock.eventTimes.keySet().contains(time)) {
                 String event = clock.eventTimes.get(time);
                 String[] eventArray = event.split(" ");
@@ -100,7 +108,7 @@ public class AuntiesRameneria {
                     orderNumbers++;
                     newOrder.setOrderNumber(orderNumbers);
                     orders.add(newOrder);
-                    clock.eventTimes.put(clock.getTime() + 30, String.format("TimeDoneOrder %d", orderNumbers));
+                    clock.eventTimes.put(clock.getTime() + timeToFinishOrder, String.format("TimeDoneOrder %d", orderNumbers));
 
                     SwingUtilities.invokeLater(() -> {
                         gui.counterPanel.addClient(orderNumbers);
@@ -110,7 +118,7 @@ public class AuntiesRameneria {
             }
 
             try {
-                Thread.sleep(15000);
+                Thread.sleep(incomingOrderTime);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 break;

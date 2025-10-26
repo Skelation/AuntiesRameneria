@@ -10,6 +10,24 @@ public class Clock implements Runnable {
     private long time = 0;
     private LongConsumer tickListener;
     public ConcurrentHashMap<Long, String> eventTimes = new ConcurrentHashMap<>();
+    public ConcurrentHashMap<Long, Integer> difficultyTimes = new ConcurrentHashMap<>();
+    public ConcurrentHashMap<Long, Integer> incomingOrderTimes = new ConcurrentHashMap<>();
+
+    public Clock() {
+        difficultyTimes.put(50L, 25);
+        difficultyTimes.put(100L, 20);
+        difficultyTimes.put(150L, 18);
+        difficultyTimes.put(200L, 15);
+        difficultyTimes.put(250L, 12);
+        difficultyTimes.put(300L, 10);
+
+        incomingOrderTimes.put(50L, 12000);
+        incomingOrderTimes.put(100L, 10000);
+        incomingOrderTimes.put(150L, 8000);
+        incomingOrderTimes.put(200L, 6000);
+        incomingOrderTimes.put(250L, 5000);
+        incomingOrderTimes.put(300L, 4000);
+    }
 
     public void setListener(LongConsumer listener) {
         this.tickListener = listener;

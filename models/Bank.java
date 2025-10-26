@@ -19,7 +19,7 @@ public class Bank {
         return this.balance;
     }
 
-    public double calculatePay(Order order, long timeLeft, long time) {
+    public double[] calculatePay(Order order, long timeLeft, long time) {
         double timeMultiplier = 1.0; 
         double complexityMultiplier = 1.0;
         double survivalMultiplier = 1.0;
@@ -49,6 +49,12 @@ public class Bank {
         System.out.println(String.format("Difficult recipe multiplier %.1f", complexityMultiplier));
         System.out.println(String.format("Survival multiplier %.1f", survivalMultiplier));
 
-        return 8.0 * timeMultiplier *  complexityMultiplier * survivalMultiplier;
+        double pay = 8.0 * timeMultiplier *  complexityMultiplier * survivalMultiplier;
+        double[] payArray = new double[4];
+        payArray[0] = pay;
+        payArray[1] = timeMultiplier;
+        payArray[2] = complexityMultiplier;
+        payArray[3] = survivalMultiplier;
+        return payArray;
     }
 }

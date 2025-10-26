@@ -1,6 +1,7 @@
 package gui;
 
 import models.*;
+
 import javax.swing.*;
 
 import gui.Counter;
@@ -18,6 +19,7 @@ public class Orders {
     public JPanel panel = new JPanel();
     public JPanel orderPanel = new JPanel();
     public JPanel moneyPanel = new JPanel();
+    private JPanel messagePanel = new JPanel();
     private JTabbedPane jTabbedPane;
     private Kitchen kitchenPanel;
     private Counter counterPanel;
@@ -50,12 +52,16 @@ public class Orders {
         this.orderButtons = new HashMap<>();
         balanceLabel = new JLabel();
         balanceLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        // balanceLabel.setForeground(Color.BLACK);
         balanceLabel.setText(String.format("$: %.2f", bank.getBalance()));
+        orderPanel.setMinimumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+        moneyPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+
+        messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
         
         moneyPanel.add(balanceLabel);
         panel.add(orderPanel);
         panel.add(moneyPanel);
+        panel.add(messagePanel);
     }
 
     public void removeOrder(Order order) {
@@ -188,18 +194,25 @@ public class Orders {
     }
 
     public void wrongSubmit(Clock clock, Bank bank, JLabel balanceLabel, int orderNumber, Order order) {
+        int amount = 10;
         clock.deleteEvent(orderNumber);
-        bank.removeAmount(10);
+        bank.removeAmount(amount);
         balanceLabel.setText(String.format("$: %.2f", bank.getBalance()));
         moneyPanel.revalidate();
         moneyPanel.repaint();
         removeOrder(order);
         counterPanel.removeClient(order.getOrderNumber());
+        String message = String.format("Wrong Submit -$%d", amount);
+        addMessage(message, "wrong");
     }
 
     public void rightSubmit(Clock clock, Bank bank, JLabel balanceLabel, int orderNumber, Order order) {
         long timeLeft = clock.getTimeEnd(orderNumber) - clock.getTime();
-        double pay = bank.calculatePay(order, timeLeft, clock.getTime());
+        double[] payArray = bank.calculatePay(order, timeLeft, clock.getTime());
+        double pay = payArray[0];
+        double timeMultiplier = payArray[1];
+        double complexityMultiplier = payArray[2];
+        double survivalMultiplier = payArray[3];
         clock.deleteEvent(orderNumber);
         bank.addAmount(pay);
         balanceLabel.setText(String.format("$: %.2f", bank.getBalance()));
@@ -207,6 +220,14 @@ public class Orders {
         moneyPanel.repaint();
         removeOrder(order);
         counterPanel.removeClient(order.getOrderNumber());
+        String message = String.format("Correct Submit +$%.2f", pay);
+        addMessage(message, "right");
+        message = String.format("Time Multiplier *%.2f", timeMultiplier);
+        addMessage(message, "right");
+        message = String.format("Complexity Multiplier *%.2f", complexityMultiplier);
+        addMessage(message, "right");
+        message = String.format("Survival Multiplier *%.2f", survivalMultiplier);
+        addMessage(message, "right");
     }
 
     public void updateButtonTimers() {
@@ -222,5 +243,28 @@ public class Orders {
         });
     }
 
+    public void addMessage(String s, String type) {
+        JLabel outputLabel = new JLabel(s);
+        switch (type) {
+            case "normal":
+                outputLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+                break;
+            case "right":
+                outputLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+                outputLabel.setForeground(Color.decode("#107f30"));
+                break;
+            case "wrong":
+                outputLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+                outputLabel.setForeground(Color.RED);
+                break;
+        }
+        messagePanel.add(outputLabel, 0);
+        Timer timer = new Timer(3000, e -> {
+            messagePanel.remove(outputLabel);
+        });
+        timer.start();
+        messagePanel.revalidate();
+        messagePanel.repaint();
+    }
 }
 
