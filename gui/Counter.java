@@ -15,7 +15,8 @@ import models.*;
 public class Counter implements KeyListener {
     public JPanel panel = new JPanel(new GridBagLayout());
     private JPanel topPanel = new JPanel(new BorderLayout()) {
-        private Image backgroundImage = new ImageIcon("Assets/resto.jpg").getImage();
+        //Set background of counter panel
+        Image backgroundImage = new ImageIcon("Assets/resto.jpg").getImage();
 
         @Override
         protected void paintComponent(Graphics g) {
@@ -30,13 +31,13 @@ public class Counter implements KeyListener {
     private int selectedClientIndex = 0;
 
     private JPanel bottomPanel = new JPanel();
-
     private JPanel SpacerPanel = new JPanel();
     private JPanel clientsPanel = new JPanel();
 
     private GridBagConstraints gbc = new GridBagConstraints();
 
     public Counter(ArrayList<Order> orders) {
+        // Keep a reference of all the client buttons
         clientButtons = new HashMap<>();
 
         panel.setFocusable(true);
@@ -55,6 +56,7 @@ public class Counter implements KeyListener {
         SpacerPanel.setOpaque(false);
         clientsPanel.setOpaque(false);
 
+        // Layout of Counter panel
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -69,6 +71,7 @@ public class Counter implements KeyListener {
         topPanel.add(SpacerPanel, BorderLayout.CENTER);
         topPanel.add(clientsPanel, BorderLayout.SOUTH);
 
+        // Add a client image for every order we have
         for (int i = 0; i < orders.size(); i++) {
             addClient(orders.get(i).getOrderNumber());
         }
@@ -78,6 +81,7 @@ public class Counter implements KeyListener {
     public void removeClient(int orderNumber) {
         JButton button = clientButtons.remove(orderNumber);
         button.setFocusable(false);
+
         if (button != null) {
             clientList.remove(button);
             clientsPanel.remove(button);
@@ -93,6 +97,7 @@ public class Counter implements KeyListener {
     }
 
     public void addClient(int orderNumber) {
+        // Select a random image for every client
         ImageIcon icon = new ImageIcon();
         Random r = new Random();
         int n = r.nextInt(0, 1);
@@ -120,6 +125,7 @@ public class Counter implements KeyListener {
         button.setBorder(BorderFactory.createEmptyBorder());
         button.setContentAreaFilled(false);
 
+        // Add button to the panel and keep a reference of it in clientButtons
         clientButtons.put(orderNumber, button);
         clientList.add(button);
         clientsPanel.add(button);
@@ -130,6 +136,7 @@ public class Counter implements KeyListener {
     }
 
     private void updateClientSelection() {
+        // Show a green border on the selected client
         for (int i = 0; i < clientList.size(); i++) {
             JButton button = clientList.get(i);
             if (i == selectedClientIndex) {
@@ -142,6 +149,7 @@ public class Counter implements KeyListener {
         focusPanel();
     }
 
+    // Go through the clients with arrow keys
     @Override
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
@@ -162,18 +170,17 @@ public class Counter implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        //Useless but needed
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-        //Useless but needed
     }
 
     public int getSelectedClientIndex() {
         return selectedClientIndex;
     }
 
+    // Focus on the panel so that inputs are recognised by it
     public void focusPanel() {
         SwingUtilities.invokeLater(() -> {
             if (!panel.hasFocus()) {

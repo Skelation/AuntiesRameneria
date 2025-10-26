@@ -18,10 +18,11 @@ public class Fridge implements KeyListener {
 
     public Fridge() {
         panel.setBackground(Color.orange);
-        drinkButtons = new JToggleButton[drinks.length];
-
         panel.setFocusable(true);
         panel.addKeyListener(this);
+
+        // Keep a reference of drink buttons
+        drinkButtons = new JToggleButton[drinks.length];
 
         // Ensures that keylistener focuses for the panel we are on
         panel.addAncestorListener(new javax.swing.event.AncestorListener() {
@@ -32,6 +33,7 @@ public class Fridge implements KeyListener {
             public void ancestorMoved(javax.swing.event.AncestorEvent event) {}
         });
 
+        // Assign image to each button
         for (int i = 0; i < drinks.length; i++) {
             ImageIcon icon = new ImageIcon();
             if (drinks[i] == "Soda") {
@@ -62,6 +64,7 @@ public class Fridge implements KeyListener {
     }
 
     private void updateDrinkSelection() {
+        // Show selected drink with a green border
         for (int i = 0; i < drinkButtons.length; i++) {
             if (drinkButtons[i] != null) {
                 if (i == selectedDrinkIndex) {
@@ -75,6 +78,7 @@ public class Fridge implements KeyListener {
         focusPanel();
     }
 
+    // Go through drink with arrow keys
     @Override
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
@@ -95,12 +99,10 @@ public class Fridge implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        //Useless but needed
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-        //Useless but needed
     }
 
     public int getSelectedDrinkIndex() {
@@ -111,6 +113,7 @@ public class Fridge implements KeyListener {
         return new Drink().setName(drinks[selectedDrinkIndex]);
     }
 
+    // Focus on the panel so that inputs are recognised by it
     public void focusPanel() {
         SwingUtilities.invokeLater(() -> {
             if (!panel.hasFocus()) {

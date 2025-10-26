@@ -27,6 +27,7 @@ public class Gui {
     public Counter counterPanel;
 
     public Gui(ArrayList<Order> orders, Stove stove, Bank bank, Clock clock) {
+        // Create every panel
         counterPanel = new Counter(orders);
         Counter = counterPanel.panel;
 
@@ -39,6 +40,7 @@ public class Gui {
         ordersPanel = new Orders(orders, tabbedPane, kitchenPanel, counterPanel, fridgePanel, bank, clock);
         Orders = ordersPanel.panel;
        
+        // Set parameters of main frame
         frame = new JFrame();
         frame.setTitle("Auntie's Rameneria");
         frame.setSize(1920, 1080);
@@ -51,6 +53,7 @@ public class Gui {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridy = 0;
         
+        // Parameters of the tabbed pane
         tabbedPane.add("1 Counter", Counter);
         tabbedPane.add("2 Kitchen", Kitchen);
         tabbedPane.add("3 Fridge", Fridge);
@@ -66,6 +69,7 @@ public class Gui {
         p.add(Orders, gbc);
         frame.add(p);
  
+        // Set keybinds for every tab (ALT + pane number)
         tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
         tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
         tabbedPane.setMnemonicAt(2, KeyEvent.VK_3);

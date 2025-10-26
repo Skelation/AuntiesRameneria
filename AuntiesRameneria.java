@@ -22,10 +22,12 @@ public class AuntiesRameneria {
         clock = new Clock();
         bank = new Bank();
 
+        // Start the swing GUI
         gui = new Gui(orders, stove, bank, clock);
 
         startClock();
 
+        // Check if we need to add a new order
         Thread orderThread = new Thread(() -> {
             takeOrders(orders, clock);
         });
@@ -37,13 +39,17 @@ public class AuntiesRameneria {
     private void startClock() {
         running = true;
         
+        // Listener checks if current time corresponds to an event
         clock.setListener(time -> {
+            // Different stages of difficulty of the game
             if (clock.difficultyTimes.keySet().contains(time)) {
                 timeToFinishOrder = clock.difficultyTimes.get(time);
             }
             if (clock.incomingOrderTimes.keySet().contains(time)) {
                 incomingOrderTime= clock.incomingOrderTimes.get(time);
             }
+
+            // Order expired or cooking of ramen is done events
             if (clock.eventTimes.keySet().contains(time)) {
                 String event = clock.eventTimes.get(time);
                 String[] eventArray = event.split(" ");
@@ -66,9 +72,11 @@ public class AuntiesRameneria {
             }
         });
 
+        // Start the clock on a new Thread
         Thread clockThread = new Thread(clock);
         clockThread.start();
 
+        // Update the timers of the cooking time and of the time left on orders
         Thread timeThread = new Thread(() -> {
             while (running) {
                 try {
@@ -100,6 +108,7 @@ public class AuntiesRameneria {
         clock.eventTimes.put(time, event);
     }
 
+    // Check if the maximum of 3 orders is reached, if not add an order in a fixed amount of seconds
     public void takeOrders(ArrayList<Order> orders, Clock clock) {
         while (true) {
             synchronized (orders) {

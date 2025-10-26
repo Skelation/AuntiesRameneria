@@ -37,7 +37,7 @@ public class Kitchen implements KeyListener {
     private String[] burnerLowImages = {"BowlRamen.png", "BowlRawRamen.png", "BowlWater.png", "EmptyBowl.png"};
 
     public String[] burnerHighImages = {"BowlRamen.png", "BowlRawRamen.png", "BowlWater.png", "EmptyBowl.png",
-        "JustShiitake.png", "JustPorkLoin.png", "JustFriedEggs.png", "JustGyoza.png", "JustSpringOnion.png", "EggAndGyoza.png",
+        "JustShiitake.png", "JustPorkLoin.png", "JustFriedEggs.png", "JustGyoza.png", "JustSpringOnion.png", "FriedEggsAndGyoza.png",
         "FriedEggsAndPorkLoin.png", "FriedEggsAndShiitake.png", "FriedEggsAndSpringOnion.png", "PorkLoinAndGyoza.png", "ShiitakeAndGyoza.png", "ShiitakeAndPorkLoin.png", 
         "SpringOnionAndGyoza.png", "SpringOnionAndPorkLoin.png", "SpringOnionAndShiitake.png", "KaraAgeAndPorkLoin.png", "KaraAgeAndFriedEggs.png", "KaraAgeAndGyoza.png",
         "KaraAgeAndShiitake.png", "KaraAgeAndSpringOnion.png", "KatsuAndFriedEggs.png", "KatsuAndGyoza.png", "KatsuAndKaraAge.png", "KatsuAndPorkLoin.png", "KatsuAndShiitake.png",
@@ -55,8 +55,9 @@ public class Kitchen implements KeyListener {
     
     private static String ASSETS_PATH = "Assets/";
 
+    // Caching of all images used to make actions fast in the game
     private void preloadImages() {
-                for (String imageName : seasoningImages) {
+        for (String imageName : seasoningImages) {
             loadAndCacheImage(imageName);
         }
         for (String imageName : toppingImages) {
@@ -126,28 +127,35 @@ public class Kitchen implements KeyListener {
             public void ancestorMoved(javax.swing.event.AncestorEvent event) {}
         });
 
+        // Cache images for fast loading of images
         preloadImages();
 
         //Stove Panel
         for (int i = 0; i < stove.getBurners().length; i++) {
+            // Get image of button
             ImageIcon icon = new ImageIcon("Assets/EmptyBowl.png");
             Image image = icon.getImage();
             image = image.getScaledInstance(300, 300, Image.SCALE_DEFAULT);
             icon = new ImageIcon(image);
+            // Create button
             JToggleButton button = new JToggleButton(icon);
             button.setFocusable(false);
             button.setPreferredSize(new Dimension(300, 300));
             button.setBorder(BorderFactory.createEmptyBorder());
             button.setContentAreaFilled(false);
+            // Timer of cooking the ramen
             long timeLeft = clock.getTimeCookEnd(i) - clock.getTime();
             JLabel timeLeftLabel = new JLabel(String.valueOf(timeLeft), SwingConstants.CENTER);
             timeLeftLabel.setForeground(Color.WHITE);
             timeLeftLabel.setFont(new Font("Arial", Font.PLAIN, 24));
             timeLeftLabel.setHorizontalAlignment(SwingConstants.CENTER);
             timeLeftLabel.setVerticalAlignment(SwingConstants.CENTER);
-            burnerButtons[i] = button;
 
+            // Keep reference of the button
+            burnerButtons[i] = button;
             orderTimeLabels.put(i, timeLeftLabel);
+
+            // Panel containing the time label and the burner button for aligning them
             JPanel burnerPanel = new JPanel(new BorderLayout());
             burnerPanel.setOpaque(false);
             burnerPanel.add(timeLeftLabel, BorderLayout.NORTH);
@@ -171,14 +179,17 @@ public class Kitchen implements KeyListener {
         
         //First row seasonings
         for (int i = 0; i < seasonings.length; i++) {
+            // Get image of the seasoning
             ImageIcon icon = new ImageIcon();
             String pathToImage = getSeasoningImage(seasonings[i]);
+            // Create button of the seasoning
             JToggleButton button = createIngredientButton(pathToImage);
             seasoningsPanel.add(button);
 
             seasoningButtons[i] = button;
             
             final int seasoningIndex = i;
+            // When clicked, the buttons add the seasoning displayed on it
             button.addActionListener(e -> {
                 Ramen ramen = stove.getBurners()[selectedBurnerIndex].getRamen();
                 switch (seasoningIndex) {
@@ -211,29 +222,34 @@ public class Kitchen implements KeyListener {
                         break;
                 }
 
+                // Show feedback on button click
                 Timer timer = new Timer(300, f -> {
                     button.setBorderPainted(false);
                 });
                 button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
                 button.setBorderPainted(true);
                 timer.start();
+
                 updateBurnerImages();
                 focusPanel();
             });
-
             panel.add(ingredientsPanel, gbc);
         }
 
         //Second row Toppings
         for (int i = 0; i < toppings.length; i++) {
+            // Get image of the seasoning
             String pathToImage = getToppingImage(toppings[i]);
+            // Create button of the seasoning
             JToggleButton button = createIngredientButton(pathToImage);
             toppingButtons[i] = button;
             toppingsPanel.add(button);
 
             final int toppingIndex = i;
+            // When clicked, the buttons add the seasoning displayed on it
             button.addActionListener(e -> {
                 Ramen ramen = stove.getBurners()[selectedBurnerIndex].getRamen();
+                // Do nothing if ramen already has two toppings
                 if (ramen.getToppings().size() < 2) {
                     switch (toppingIndex) {
                         case (0):
@@ -261,6 +277,7 @@ public class Kitchen implements KeyListener {
                             System.out.println("Not handled yet");
                             break;
                     }
+                    // Show feedback on button click
                     Timer timer = new Timer(300, f -> {
                         button.setBorderPainted(false);
                     });
@@ -281,6 +298,7 @@ public class Kitchen implements KeyListener {
         for (int i = 0; i < burnerButtons.length; i++) {
             if (burnerButtons[i] != null) {
                 if (i == selectedBurnerIndex) {
+                    // Show selected burner with a green border
                     burnerButtons[i].setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
                     burnerButtons[i].setBorderPainted(true);
                 } else {
@@ -301,6 +319,7 @@ public class Kitchen implements KeyListener {
     }
 
 
+    // Update time until ramen is cooked timer on GUI
     public void updateKitchenTimers() {
         SwingUtilities.invokeLater(() -> {
             for (Map.Entry<Integer, JLabel> entry : orderTimeLabels.entrySet()) {
@@ -376,6 +395,9 @@ public class Kitchen implements KeyListener {
         }
     }
 
+    // Go through the clients with arrow keys
+    // Cook ramen with <ENTER>
+    // Reset burner with <DELETE> or <BACKSPACE>
     @Override
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
@@ -396,6 +418,7 @@ public class Kitchen implements KeyListener {
                     clock.eventTimes.put(clock.getTime() + 5, String.format("TimeDoneCooking %d", selectedBurnerIndex));
                 }
                 break;
+            case KeyEvent.VK_BACK_SPACE:
             case KeyEvent.VK_DELETE:
                 Burner selectedBurner = stove.getBurners()[selectedBurnerIndex];
                 selectedBurner.reset();
@@ -418,6 +441,7 @@ public class Kitchen implements KeyListener {
         return selectedBurnerIndex;
     }
     
+    // Focus on the panel so that inputs are recognised by it
     public void focusPanel() {
         SwingUtilities.invokeLater(() -> {
             if (!panel.hasFocus()) {

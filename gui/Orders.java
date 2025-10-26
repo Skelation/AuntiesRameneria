@@ -20,14 +20,17 @@ public class Orders {
     public JPanel orderPanel = new JPanel();
     public JPanel moneyPanel = new JPanel();
     private JPanel messagePanel = new JPanel();
+
     private JTabbedPane jTabbedPane;
     private Kitchen kitchenPanel;
     private Counter counterPanel;
     private Fridge fridgePanel;
+
     private ArrayList<Order> orders;
     private Map<Integer, JLabel> orderTimeLabels;
     public Map<Integer, OrderButton> orderButtons;
     private Map<Order, ArrayList<JLabel>> orderLabelMap = new HashMap<>();
+
     private Bank bank;
     public JLabel balanceLabel;
     private Clock clock;
@@ -36,14 +39,17 @@ public class Orders {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         orderPanel.setLayout(new BoxLayout(orderPanel, BoxLayout.Y_AXIS));
         orderPanel.setBackground(Color.GRAY);
+
         this.bank = bank;
         this.clock = clock;
+        // Keep reference of the time left labels of every order
         this.orderTimeLabels = new HashMap<>();
 
         orderPanel.add(Box.createVerticalStrut(5));
         for (int i = 0; i < orders.size(); i++) {
             addOrder(orders.get(i), bank);
         }
+
         jTabbedPane = tabbedPane;
         this.kitchenPanel = kitchenPanel;
         this.counterPanel = counterPanel;
@@ -88,16 +94,18 @@ public class Orders {
 
     public void addOrder(Order order, Bank bank) {
         JPanel content = new JPanel();
+        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+
+        // Keep reference to labels of buttons
+        ArrayList<JLabel> labels = new ArrayList<>();
         long timeEndOrder = clock.getTimeEnd(order.getOrderNumber());
         long timeLeft = timeEndOrder - clock.getTime();
-
-        ArrayList<JLabel> labels = new ArrayList<>();
-
-        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
 
         JLabel timeleftLabel = new JLabel(String.valueOf(timeLeft));
         content.add(timeleftLabel); 
         labels.add(timeleftLabel);
+
+        // Add Seasoning toppings and drink to label
         JLabel seasoningLabel = new JLabel(order.getRamen().getSeasoning());
         content.add(seasoningLabel);
         labels.add(seasoningLabel);
@@ -112,6 +120,7 @@ public class Orders {
             labels.add(drinkLabel);
         }
 
+        // Keep reference to labels of buttons
         orderLabelMap.put(order, labels);
 
         OrderButton button = new OrderButton();
@@ -120,14 +129,17 @@ public class Orders {
 
         button.setAlignmentX(Component.LEFT_ALIGNMENT);
         button.setMaximumSize(new Dimension(Integer.MAX_VALUE, button.getPreferredSize().height));
+        // When clicked check on which pane we are and act accordingly
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int tabIndex = jTabbedPane.getSelectedIndex();
                 int orderNumber = order.getOrderNumber();
                 switch (tabIndex) {
+                    // When on counter do nothing
                     case 0:
                     break;
+                    // When on Kitchen, try to submit ramen selected
                     case 1:
                         Stove stove = kitchenPanel.getStove();
                         Burner[] burners = stove.getBurners();
@@ -145,6 +157,7 @@ public class Orders {
                         kitchenPanel.updateBurnerImages();
                         kitchenPanel.focusPanel();
                         break;
+                    // When on Fridge, try to submit drink selected
                     case 2:
                         Drink selectedDrink = fridgePanel.getSelectedDrink();
                         button.setUserDrink(selectedDrink);
@@ -167,12 +180,14 @@ public class Orders {
         orderPanel.add(button);
         orderPanel.add(Box.createVerticalStrut(5));
         orderButtons.put(order.getOrderNumber(), button);
+        // Keep reference of order button
         orderTimeLabels.put(order.getOrderNumber(), timeleftLabel);
 
         panel.revalidate();
         panel.repaint();
     }
 
+    // Update progress of order
     public void updateOrderDisplay(Order order, boolean ramenDone,  boolean drinkDone) {
         ArrayList<JLabel> labels = orderLabelMap.get(order);
 
@@ -193,6 +208,7 @@ public class Orders {
         panel.repaint();
     }
 
+    // Call when user wrongly submits an order
     public void wrongSubmit(Clock clock, Bank bank, JLabel balanceLabel, int orderNumber, Order order) {
         int amount = 10;
         clock.deleteEvent(orderNumber);
@@ -206,20 +222,17 @@ public class Orders {
         addMessage(message, "wrong");
     }
 
+    // Call when user successfully submits an order
     public void rightSubmit(Clock clock, Bank bank, JLabel balanceLabel, int orderNumber, Order order) {
         long timeLeft = clock.getTimeEnd(orderNumber) - clock.getTime();
         double[] payArray = bank.calculatePay(order, timeLeft, clock.getTime());
+
         double pay = payArray[0];
         double timeMultiplier = payArray[1];
         double complexityMultiplier = payArray[2];
         double survivalMultiplier = payArray[3];
-        clock.deleteEvent(orderNumber);
-        bank.addAmount(pay);
-        balanceLabel.setText(String.format("$: %.2f", bank.getBalance()));
-        moneyPanel.revalidate();
-        moneyPanel.repaint();
-        removeOrder(order);
-        counterPanel.removeClient(order.getOrderNumber());
+
+        // Show all multipliers for positive feedback on player
         String message = String.format("Correct Submit +$%.2f", pay);
         addMessage(message, "right");
         message = String.format("Time Multiplier *%.2f", timeMultiplier);
@@ -228,8 +241,19 @@ public class Orders {
         addMessage(message, "right");
         message = String.format("Survival Multiplier *%.2f", survivalMultiplier);
         addMessage(message, "right");
+
+        // Delete orders
+        clock.deleteEvent(orderNumber);
+        bank.addAmount(pay);
+        balanceLabel.setText(String.format("$: %.2f", bank.getBalance()));
+        removeOrder(order);
+        counterPanel.removeClient(order.getOrderNumber());
+
+        moneyPanel.revalidate();
+        moneyPanel.repaint();
     }
 
+    // Update the timer displaying the time left before cooking ramen is done
     public void updateButtonTimers() {
         SwingUtilities.invokeLater(() -> {
             for (Map.Entry<Integer, JLabel> entry : orderTimeLabels.entrySet()) {
@@ -243,6 +267,7 @@ public class Orders {
         });
     }
 
+    // Display a message under balance to give report on user action
     public void addMessage(String s, String type) {
         JLabel outputLabel = new JLabel(s);
         switch (type) {

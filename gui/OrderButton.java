@@ -4,9 +4,13 @@ import javax.swing.JButton;
 
 import models.*;
 
+// Class to check if ramen or drink has been added to order
 class OrderButton extends JButton {
+    // Ramen submitted to the order
     private Ramen userRamen;
+    // Drink submitted to the order
     private Drink userDrink;
+    // Order to compare to
     private Order order;
 
     public Ramen getUserRamen() {
