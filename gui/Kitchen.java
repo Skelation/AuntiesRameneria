@@ -19,7 +19,16 @@ public class Kitchen implements KeyListener {
     private GridBagConstraints gbc = new GridBagConstraints();
     private Map<Integer, JLabel> orderTimeLabels = new HashMap<>();
 
-    private JPanel stovePanel = new JPanel(new GridBagLayout());
+    ImageIcon stoveBgIcon = new ImageIcon("Assets/metalSurface.jpg");
+    Image stoveBgImage = stoveBgIcon.getImage();
+
+    private JPanel stovePanel = new JPanel(new GridBagLayout()) {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(stoveBgImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    };
     private JPanel burnersPanel = new JPanel();
     private JPanel ingredientsPanel = new JPanel();
 

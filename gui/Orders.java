@@ -4,6 +4,8 @@ import models.*;
 
 import javax.swing.*;
 
+import org.w3c.dom.events.MouseEvent;
+
 import gui.Counter;
 import gui.Kitchen;
 
@@ -34,8 +36,16 @@ public class Orders {
 
     public Orders(ArrayList<Order> orders, JTabbedPane tabbedPane, Kitchen kitchenPanel, Counter counterPanel, Fridge fridgePanel, Bank bank, Clock clock) {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(new Color(245, 245, 245));
+
         orderPanel.setLayout(new BoxLayout(orderPanel, BoxLayout.Y_AXIS));
-        orderPanel.setBackground(Color.GRAY);
+        orderPanel.setBackground(new Color(250, 250, 250));
+
+        moneyPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
+        moneyPanel.setBackground(new Color(235, 235, 235));
+        moneyPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(210, 210, 210)));
+
+
         this.bank = bank;
         this.clock = clock;
         this.orderTimeLabels = new HashMap<>();
@@ -50,13 +60,13 @@ public class Orders {
         this.fridgePanel = fridgePanel;
         this.orders = orders;
         this.orderButtons = new HashMap<>();
-        balanceLabel = new JLabel();
-        balanceLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        balanceLabel.setText(String.format("$: %.2f", bank.getBalance()));
+        balanceLabel = new JLabel(String.format("$: %.2f", bank.getBalance()));
+        balanceLabel.setFont(new Font("Segoe UI", Font.BOLD, 16));
         orderPanel.setMinimumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
         moneyPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 
         messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
+        messagePanel.setBackground(new Color(245, 245, 245));
         
         moneyPanel.add(balanceLabel);
         panel.add(orderPanel);
@@ -94,20 +104,27 @@ public class Orders {
         ArrayList<JLabel> labels = new ArrayList<>();
 
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+        content.setOpaque(false);
+        content.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
         JLabel timeleftLabel = new JLabel(String.valueOf(timeLeft));
+        timeleftLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        
         content.add(timeleftLabel); 
         labels.add(timeleftLabel);
         JLabel seasoningLabel = new JLabel(order.getRamen().getSeasoning());
+        seasoningLabel.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         content.add(seasoningLabel);
         labels.add(seasoningLabel);
         for (String topping : order.getRamen().getToppings()) {
             JLabel toppingLabel = new JLabel("+ " + topping);
+            toppingLabel.setFont(new Font("Segoe UI", Font.PLAIN, 13));
             content.add(toppingLabel);
             labels.add(toppingLabel);
         }
         if (order.getDrink() != null) {
             JLabel drinkLabel = new JLabel("+ " + order.getDrink().getName());
+            drinkLabel.setFont(new Font("Segoe UI", Font.PLAIN, 13));
             content.add(drinkLabel);
             labels.add(drinkLabel);
         }
@@ -116,6 +133,17 @@ public class Orders {
 
         OrderButton button = new OrderButton();
         button.setLayout(new BorderLayout());
+        button.setBackground(Color.WHITE);
+        button.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(220, 220, 220), 1, true),
+            BorderFactory.createEmptyBorder(8, 12, 8, 12)
+        ));
+
+        button.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        button.setFocusPainted(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button.setOpaque(true);
+
         button.add(content, BorderLayout.CENTER);
 
         button.setAlignmentX(Component.LEFT_ALIGNMENT);

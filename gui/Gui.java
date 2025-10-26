@@ -17,6 +17,8 @@ public class Gui {
     public JPanel orderPane = new JPanel();
     public JTabbedPane tabbedPane = new JTabbedPane();
 
+    private JPanel Info;
+    public Info infoPanel;
     private JPanel Kitchen;
     public Kitchen kitchenPanel;
     private JPanel Fridge;
@@ -27,6 +29,9 @@ public class Gui {
     public Counter counterPanel;
 
     public Gui(ArrayList<Order> orders, Stove stove, Bank bank, Clock clock) {
+        infoPanel = new Info();
+        Info = infoPanel.panel;
+        
         counterPanel = new Counter(orders);
         Counter = counterPanel.panel;
 
@@ -51,6 +56,7 @@ public class Gui {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridy = 0;
         
+        tabbedPane.add("Instructions", Info);
         tabbedPane.add("1 Counter", Counter);
         tabbedPane.add("2 Kitchen", Kitchen);
         tabbedPane.add("3 Fridge", Fridge);
@@ -66,8 +72,8 @@ public class Gui {
         p.add(Orders, gbc);
         frame.add(p);
  
-        tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
-        tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
-        tabbedPane.setMnemonicAt(2, KeyEvent.VK_3);
+        tabbedPane.setMnemonicAt(1, KeyEvent.VK_1);
+        tabbedPane.setMnemonicAt(2, KeyEvent.VK_2);
+        tabbedPane.setMnemonicAt(3, KeyEvent.VK_3);
     }
 }
