@@ -210,6 +210,13 @@ public class Kitchen implements KeyListener {
                         System.out.println("Not handled yet");
                         break;
                 }
+
+                Timer timer = new Timer(300, f -> {
+                    button.setBorderPainted(false);
+                });
+                button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
+                button.setBorderPainted(true);
+                timer.start();
                 updateBurnerImages();
                 focusPanel();
             });
@@ -227,7 +234,7 @@ public class Kitchen implements KeyListener {
             final int toppingIndex = i;
             button.addActionListener(e -> {
                 Ramen ramen = stove.getBurners()[selectedBurnerIndex].getRamen();
-               if (ramen.getToppings().size() < 2) {
+                if (ramen.getToppings().size() < 2) {
                     switch (toppingIndex) {
                         case (0):
                             ramen.addTopping("Shiitake");
@@ -254,6 +261,13 @@ public class Kitchen implements KeyListener {
                             System.out.println("Not handled yet");
                             break;
                     }
+                    Timer timer = new Timer(300, f -> {
+                        button.setBorderPainted(false);
+                    });
+                    button.setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
+                    button.setBorderPainted(true);
+                    timer.start();
+
                     updateBurnerImages();
                     focusPanel();
                 }
